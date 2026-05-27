@@ -3,10 +3,16 @@
 *
 */
 
--- Creating table that will be used to import the .csv file
+
+-- Trying to follow a star schema database layout
+--
+-- Creating tables that will be used to import the two .csv files
+
 -- Main table 
 
-CREATE TABLE ev_washington(
+
+
+CREATE TABLE population(
   id INTEGER PRIMARY KEY,
   vin TEXT,
   location_id INTEGER,
@@ -26,22 +32,37 @@ CREATE TABLE ev_washington(
   coordinate_id INTEGER,
   electric_utility TEXT,
   census_tract_2020 INTEGER,
-  FOREIGN KEY(coordinate_id) REFERENCES coordinates(id),
-  FOREIGN KEY(location_id) REFERENCES locations(id)
+  utility_id INTEGER,
+  vehicle_id INTEGER,
+  FOREIGN KEY(coordinate_id) REFERENCES coordinates(coordinate_id),
+  FOREIGN KEY(location_id) REFERENCES locations(id),
+  FOREIGN KEY(vehicle_id) REFERENCES vehicles(vehicle_id)
 );
 
--- Table used to house the 
+
+CREATE TABLE vehicles(
+  vehicle_id INTEGER PRIMARY KEY,
+  vin TEXT,
+  make TEXT,
+  model TEXT,
+  model_year INTEGER,
+  ev_type TEXT
+);
+
 CREATE TABLE locations(
-  id INTEGER PRIMARY KEY,
+  location_id INTEGER PRIMARY KEY,
   postal_code INTEGER,
   county TEXT,
   city TEXT,
   state TEXT,
-  UNIQUE(postal_code, county, city, state)
+  region TEXT,
+  legislative_district INTEGER,
+  census_tract_2020 INTEGER,
+  UNIQUE(postal_code, county, city)
 );
 
 CREATE TABLE coordinates(
-  id INTEGER PRIMARY KEY,
+  coordinate_id INTEGER PRIMARY KEY,
   coordinate_text_01 TEXT,
   coordinate_text_02 TEXT,
   longitude REAL,
@@ -55,3 +76,59 @@ CREATE VIRTUAL TABLE spatial_index USING rtree(
   minY, -- Longitude Y coordinate
   maxY -- Longitude Y coordinate
 );
+
+CREATE TABLE registration(
+  id INTEGER PRIMARY KEY,
+  vin TEXT,
+  dol_vehicle_id INTEGER,
+  model_year INTEGER,
+  make TEXT,
+  model TEXT,
+  ev_type TEXT,
+  primary_use TEXT,
+  used_status TEXT,
+  ev_range INTEGER,
+  odometer INTEGER,
+  odometer_description TEXT,
+  sale_price REAL,
+  sale_date TEXT,
+  transaction_type TEXT,
+  transaction_date TEXT,
+  transaction_year INTEGER,
+  county TEXT,
+  city TEXT,
+  state TEXT,
+  postal_code INTEGER,
+  cafv_eligibility TEXT,
+  meets_hb2042_range_requirement TEXT,
+  meets_hb2042_sale_date_requirement TEXT,
+  meets_hb2042_sale_price_requirement TEXT,
+  hb2042_range_requirement_reason TEXT,
+  hb2042_purchase_date_requirement_reason TEXT,
+  hb2042_sale_price_requirement_reason TEXT,
+  ev_fee_paid TEXT,
+  transportation_electrification_fee_paid TEXT,
+  hybrid_vehicle_electrification_fee_paid TEXT,
+  census_tract_2020 INTEGER,
+  legislative_district INTEGER,
+  electric_utility TEXT,
+  location_id INTEGER,
+  vehicle_id INTEGER,
+  compliance_id INTEGER,
+  utility_id INTEGER,
+  FOREIGN KEY (location_id) REFERENCES locations(location_id),
+  FOREIGN KEY (vehicle_id) REFERENCES vehicles(vehicle_id),
+  FOREIGN KEY (compliance_id) REFERENCES hb2042_compliance(compliance_id)
+);
+
+CREATE TABLE hb2042_compliance(
+  compliance_id INTEGER PRIMARY KEY,
+  meets_range_req TEXT,
+  range_req_reason TEXT,
+  meets_sale_date_req TEXT,
+  sale_date_req_reason TEXT,
+  meets_sale_price_req TEXT,
+  sale_price_req_reason TEXT
+);
+
+
