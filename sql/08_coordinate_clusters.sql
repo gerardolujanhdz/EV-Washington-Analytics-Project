@@ -1,21 +1,19 @@
--- Creating a table to house all coordinates + coordinate id +
--- postal_code + 
+-- Creating a table to house all coordinates + coordinate id
 
 
-WITH coordinate_postal_codes AS (
+WITH coordinate_joined AS (
   SELECT
-      c.id,
+      c.coordinate_id,
       c.latitude,
       c.longitude,
-      l.postal_code,
-      l.county
-  FROM ev_washington ew
+      l.region
+  FROM population p 
   JOIN coordinates c
-    ON ew.coordinate_id = c.id
+    ON p.coordinate_id = c.coordinate_id
   JOIN locations l
-    ON ew.location_id = l.id
+    ON population.location_id = l.location_id
   WHERE l.state = 'WA'
 )
 -- Just checking Counts 
 SELECT COUNT(*)
-FROM coordinate_postal_codes;
+FROM coordinate_joined;
