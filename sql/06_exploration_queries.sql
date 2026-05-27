@@ -63,6 +63,16 @@ GROUP BY
   v.make
 ORDER BY count DESC
 
+-- Proportion of Registration by County 
+SELECT 
+  l.county AS county,
+  COUNT(l.county) AS count,
+  COUNT(*) * 100.0 / SUM(COUNT(*)) OVER() AS percentage_of_vehicles
+FROM population 
+LEFT JOIN locations ON population.location_id = locations.location_id
+GROUP BY county;
+
+
 -- Registration Table Queries 
 --
 
@@ -91,3 +101,39 @@ LEFT JOIN locations l ON registration.location_id = l.location_id
 GROUP BY county
 ORDER BY count DESC;
 
+-- Proportion of Registrations by County by Year 
+
+WITH countie_props AS (
+  SELECT 
+    l.county AS county,
+    registration.transaction_year AS year,
+    COUNT(l.county) AS county_total
+    FROM registration
+    LEFT JOIN locations l ON registration.location_id = l.location_id
+    WHERE l.county IS NOT NULL
+    GROUP BY l.county, registration.transaction_year
+)
+SELECT 
+  county,
+  year, 
+  county_total,
+  county_total * 100.0 / (SELECT COUNT(*) FROM registration WHERE transaction_year = year) AS percentage_of_registrations 
+FROM countie_props
+ORDER BY year DESC, percentage_of_registrations DESC;
+
+-- YoY Change of Registration 
+WITH year_totals AS (
+  SELECT 
+    transaction_year AS year,
+    COUNT(transaction_year) AS total 
+  FROM registration 
+  WHERE year IS NOT NULL 
+  GROUP BY transaction_year 
+)
+  SELECT 
+    year,
+    total,
+    LAG(total) OVER (ORDER BY year) AS previous_year_registration,
+    total - LAG(total) OVER (ORDER BY year) AS YOY_diff,
+    ROUND((total - LAG(total) OVER (ORDER BY year)) * 100.0 / (LAG(total) OVER (ORDER BY year)),2) AS yoy_perc_change
+  FROM year_totals;
