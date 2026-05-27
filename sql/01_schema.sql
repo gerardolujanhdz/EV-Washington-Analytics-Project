@@ -62,6 +62,12 @@ CREATE TABLE locations(
   UNIQUE(postal_code, county, city,state, legislative_district, census_tract_2020)
 );
 
+CREATE TABLE regions(
+  region_id INTEGER PRIMARY KEY,
+  county TEXT,
+  region TEXT
+);
+
 CREATE TABLE coordinates(
   coordinate_id INTEGER PRIMARY KEY,
   coordinate_text_01 TEXT,

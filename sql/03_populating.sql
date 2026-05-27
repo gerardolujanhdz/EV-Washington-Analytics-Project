@@ -55,6 +55,60 @@ SET location_id = (
       AND registration.census_tract_2020 = l.census_tract_2020
 );
 
+-- Populating Region column in locations table 
+INSERT INTO regions(county,region)
+VALUES 
+  ('San Juan', 'Northwest'),
+  ('Kitsap', 'Peninsulas'),
+  ('Clallam', 'Peninsulas'),
+  ('Jefferson', 'Peninsulas'),
+  ('Grays Harbor', 'Peninsulas'),
+  ('Mason', 'Peninsulas'),
+  ('Pacific', 'Southwest'),
+  ('Thurston', 'Metro Puget Sound'),
+  ('Lewis', 'Southwest'),
+  ('Wahkiakum', 'Southwest'),
+  ('Cowlitz', 'Southwest'),
+  ('Clark', 'Southwest'),
+  ('Skamania', 'Southwest'),
+  ('Pierce', 'Metro Puget Sound'),
+  ('King', 'Metro Puget Sound'),
+  ('Snohomish', 'Metro Puget Sound'),
+  ('Skagit', 'Northwest'),
+  ('Whatcom', 'Northwest'),
+  ('Okanogan', 'North Central'),
+  ('Chelan', 'North Central'),
+  ('Douglas', 'North Central'),
+  ('Kittitas', 'North Central'),
+  ('Yakima', 'Wine Country'),
+  ('Klickitat', 'Wine Country'),
+  ('Grant', 'North Central'),
+  ('Benton', 'Wine Country'),
+  ('Ferry','Eastern'),
+  ('Stevens','Eastern'),
+  ('Pend Oreille','Eastern'),
+  ('Lincoln','Eastern'),
+  ('Spokane','Eastern'),
+  ('Adams','Eastern'),
+  ('Franklin','Wine Country'),
+  ('Walla Walla','Wine Country'),
+  ('Columbia','Wine Country'),
+  ('Garfield','Wine Country'),
+  ('Asotin','Wine Country'),
+  ('Whitman','Eastern'),
+  ('Island','Northwest');
+
+-- Updating locations table region based on region table values 
+UPDATE locations
+  SET region = (
+    SELECT regions.region
+    FROM regions 
+    WHERE locations.county = regions.county
+);
+
+-- Dropping now unneeded regions table 
+DROP TABLE regions;
+
 -- Dropping postal_code, county, city, state, legislative_district and census columns 
 --  from the fact tables population and registration
 
