@@ -6,3 +6,6 @@
 # python cache
 __pychache__/
 *.pyc
+
+#data
+*.csv
