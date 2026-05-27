@@ -35,7 +35,7 @@ CREATE TABLE population(
   utility_id INTEGER,
   vehicle_id INTEGER,
   FOREIGN KEY(coordinate_id) REFERENCES coordinates(coordinate_id),
-  FOREIGN KEY(location_id) REFERENCES locations(id),
+  FOREIGN KEY(location_id) REFERENCES locations(location_id),
   FOREIGN KEY(vehicle_id) REFERENCES vehicles(vehicle_id)
 );
 
