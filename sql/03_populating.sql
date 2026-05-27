@@ -4,16 +4,88 @@ BEGIN TRANSACTION;
 *
 */
 
--- Inserting unique postal code locations from the main table ev_washington
+-- Inserting unique locations from the two "facts" tables, population and registration, 
 -- into our locations table 
-INSERT OR IGNORE INTO locations(postal_code, county, city, state)
+INSERT OR IGNORE INTO locations(postal_code, county, city, state, legislative_district, census_tract_2020)
   SELECT 
-    ev.postal_code,
-    ev.county,
-    ev.city,
-    ev.state
-  FROM ev_washington ev
-  WHERE ev.postal_code IS NOT NULL;
+    postal_code,
+    county,
+    city,
+    state,
+    legislative_district,
+    census_tract_2020
+  FROM registration
+  WHERE registration.postal_code IS NOT NULL;
+
+INSERT OR IGNORE INTO locations(postal_code, county, city, state,legislative_district, census_tract_2020)
+  SELECT 
+    postal_code,
+    county,
+    city,
+    state,
+    legislative_district,
+    census_tract_2020
+  FROM population
+  WHERE population.postal_code IS NOT NULL;
+
+-- Updating location_id column in population and registration tables from 
+-- the locations table 
+
+UPDATE population
+SET location_id = (
+    SELECT l.location_id
+    FROM locations l
+    WHERE population.postal_code = l.postal_code
+      AND population.county = l.county
+      AND population.city = l.city
+      AND population.state = l.state
+      AND population.legislative_district = l.legislative_district
+      AND population.census_tract_2020 = l.census_tract_2020
+);
+
+UPDATE registration 
+SET location_id = (
+    SELECT l.location_id
+    FROM locations l
+    WHERE registration.postal_code = l.postal_code
+      AND registration.county = l.county
+      AND registration.city = l.city
+      AND registration.state = l.state
+      AND registration.legislative_district = l.legislative_district
+      AND registration.census_tract_2020 = l.census_tract_2020
+);
+
+-- Dropping postal_code, county, city, state, legislative_district and census columns 
+--  from the fact tables population and registration
+
+
+ALTER TABLE population 
+  DROP COLUMN postal_code;
+ALTER TABLE population 
+  DROP COLUMN county;
+ALTER TABLE population 
+  DROP COLUMN city;
+ALTER TABLE population 
+  DROP COLUMN state;
+ALTER TABLE population
+  DROP COLUMN legislative_district;
+ALTER TABLE population 
+  DROP COLUMN census_tract_2020;
+
+ALTER TABLE registration 
+  DROP COLUMN postal_code;
+ALTER TABLE registration 
+  DROP COLUMN county;
+ALTER TABLE registration 
+  DROP COLUMN city;
+ALTER TABLE registration 
+  DROP COLUMN state;
+ALTER TABLE registration
+  DROP COLUMN legislative_district;
+ALTER TABLE registration 
+  DROP COLUMN census_tract_2020;
+
+
 
 -- Inserting the raw vehicle coordinate text from the main table ev_washington
 -- into our coordinates table 
@@ -21,10 +93,10 @@ INSERT OR IGNORE INTO locations(postal_code, county, city, state)
 -- Filtering out the null and '' coordinates 
 INSERT INTO coordinates(coordinate_text_01)
   SELECT DISTINCT 
-   ev_washington.coordinate 
-  FROM ev_washington 
-  WHERE ev_washington.coordinate IS NOT NULL 
-    AND ev_washington.coordinate != '';
+   population.coordinate 
+  FROM population
+  WHERE population.coordinate IS NOT NULL 
+    AND population.coordinate != '';
 
 -- The raw coordinate text has the following form: 
 -- "POINT (longitude latitude)" 
@@ -63,6 +135,35 @@ UPDATE coordinates
   WHERE coordinate_text_01 = ''
     OR coordinate_text_01 IS NULL;
 
+/* Updating population.coordinate_id = coordinates.id 
+ * where population.vehicle_coordinates = coordinates.coordinate_text_01
+ */
+ 
+UPDATE population 
+  SET coordinate_id = (
+    SELECT c.coordinate_id 
+    FROM coordinates c 
+    WHERE population.coordinate = c.coordinate_text_01
+);
+
+-- Nulling out population.coordinates_id where 
+-- population.coordinate = ''
+
+UPDATE population 
+  SET coordinate_id = NULL 
+  WHERE population.coordinate = '';
+
+-- Dropping coordinate text in ev_washington 
+ALTER TABLE population 
+  DROP COLUMN coordinate;
+
+-- Dropping coordinate_text_01 and coordinate_text_02 from coordinates table 
+ALTER TABLE coordinates
+  DROP COLUMN coordinate_text_01;
+
+ALTER TABLE coordinates 
+  DROP COLUMN coordinate_text_02;
+
 -- Populating spatial_index table with the id, longitude, latitude from 
 -- the coordinates table
 --
@@ -71,7 +172,7 @@ UPDATE coordinates
 
 INSERT INTO spatial_index(id, minX, maxX, minY, maxY)
   SELECT 
-    c.id,
+    c.coordinate_id,
     c.longitude,
     c.longitude,
     c.latitude,
@@ -80,54 +181,126 @@ INSERT INTO spatial_index(id, minX, maxX, minY, maxY)
   WHERE longitude IS NOT NULL 
     AND latitude is NOT NULL;
 
-/* Updating ev_washington.coordinate_id = coordinates.id 
- * where ev_washington.vehicle_coordinates = coordinates.raw_coordinate_text
- */
- 
-UPDATE ev_washington
-  SET coordinate_id = (
-    SELECT c.id 
-    FROM coordinates c 
-    WHERE ev_washington.coordinate = c.coordinate_text_01
+-- Populating vehicles table from the population and registration tables 
+
+INSERT OR IGNORE INTO vehicles(vin, make, model, model_year, ev_type)
+  SElECT
+    vin, 
+    make,
+    model,
+    model_year,
+    ev_type 
+  FROM registration 
+  WHERE registration.vin IS NOT NULL;
+
+INSERT OR IGNORE INTO vehicles(vin, make, model, model_year, ev_type)
+  SElECT
+    vin, 
+    make,
+    model,
+    model_year,
+    ev_type 
+  FROM population 
+  WHERE population.vin IS NOT NULL;
+
+-- Updating vehicle_id column in population and registration tables from 
+-- the vehicles table 
+
+UPDATE population
+SET vehicle_id = (
+    SELECT v.vehicle_id
+    FROM vehicles v
+    WHERE population.vin = v.vin
+      AND population.make = v.make
+      AND population.model = v.model
+      AND population.model_year = v.model_year
+      AND population.ev_type = v.ev_type
 );
 
--- Nulling out ev_washington.coordinates_id where 
--- ev_washington.coordinate = ''
-
-UPDATE ev_washington
-  SET coordinate = NULL 
-  WHERE ev_washington.coordinate = '';
-
-/* Updating ev_washington.location_id = locations.id 
-* where the postal_code, city, county, state match 
-*/
-
-UPDATE ev_washington
-SET location_id = (
-    SELECT l.id
-    FROM locations l
-    WHERE ev_washington.postal_code = l.postal_code
-      AND ev_washington.county = l.county
-      AND ev_washington.city = l.city
-      AND ev_washington.state = l.state
+UPDATE registration
+SET vehicle_id = (
+    SELECT v.vehicle_id
+    FROM vehicles v
+    WHERE registration.vin = v.vin
+      AND registration.make = v.make
+      AND registration.model = v.model
+      AND registration.model_year = v.model_year
+      AND registration.ev_type = v.ev_type
 );
 
--- Dropping ev_washington postal_code, city, county, state columns 
-ALTER TABLE ev_washington
-  DROP COLUMN postal_code;
 
-ALTER TABLE ev_washington
-  DROP COLUMN county;
+-- Dropping vin, make, model, model_year, ev_type columns from facts tables 
+ALTER TABLE registration
+  DROP COLUMN vin;
+ALTER TABLE registration
+  DROP COLUMN make;
+ALTER TABLE registration 
+  DROP COLUMN model;
+ALTER TABLE registration
+  DROP COLUMN model_year;
+ALTER TABLE registration 
+  DROP COLUMN ev_type;
 
-ALTER TABLE ev_washington
-  DROP COLUMN city;
+ALTER TABLE population
+  DROP COLUMN vin;
+ALTER TABLE population
+  DROP COLUMN make;
+ALTER TABLE population 
+  DROP COLUMN model;
+ALTER TABLE population
+  DROP COLUMN model_year;
+ALTER TABLE population 
+  DROP COLUMN ev_type;
 
-ALTER TABLE ev_washington
-  DROP COLUMN state;
+-- Populating hb2042_compliance table from registration table
 
--- Dropping coordinate text in ev_washington 
-ALTER TABLE ev_washington
-  DROP COLUMN coordinate;
+INSERT OR IGNORE INTO hb2042_compliance(
+  meets_range_req, 
+  range_req_reason, 
+  meets_sale_date_req, 
+  sale_date_req_reason,
+  meets_sale_price_req,
+  sale_price_req_reason)
 
+  SELECT 
+    meets_hb2042_range_requirement,
+    hb2042_range_requirement_reason,
+    meets_hb2042_sale_date_requirement,
+    hb2042_purchase_date_requirement_reason,
+    meets_hb2042_sale_price_requirement,
+    hb2042_sale_price_requirement_reason
+  FROM registration;
+
+
+-- Updating compliance_id column in registration tables from 
+-- the hb2042_compliance table 
+
+UPDATE registration
+SET compliance_id = (
+    SELECT c.compliance_id
+    FROM hb2042_compliance c
+    WHERE 
+      registration.meets_hb2042_range_requirement = c.meets_range_req AND
+      registration.hb2042_range_requirement_reason = c.range_req_reason AND
+      registration.meets_hb2042_sale_date_requirement = c.meets_sale_date_req AND 
+      registration.hb2042_purchase_date_requirement_reason = c.sale_date_req_reason AND 
+      registration.meets_hb2042_sale_price_requirement = c.meets_sale_price_req AND 
+      registration.hb2042_sale_price_requirement_reason = c.sale_price_req_reason
+);
+
+-- Dropping meets_range_req, range_req_reason, meets_sale_date_req,
+-- sale_date_req_reason, meets_sale_price_req, sale_price_req_reason from registration
+ALTER TABLE registration
+  DROP COLUMN meets_hb2042_range_requirement;
+ALTER TABLE registration 
+  DROP COLUMN hb2042_range_requirement_reason;
+ALTER TABLE registration
+  DROP COLUMN meets_hb2042_sale_date_requirement;
+ALTER TABLE registration 
+  DROP COLUMN hb2042_purchase_date_requirement_reason;
+ALTER TABLE registration
+  DROP COLUMN meets_hb2042_sale_price_requirement;
+ALTER TABLE registration
+  DROP COLUMN hb2042_sale_price_requirement_reason;
 
 COMMIT;

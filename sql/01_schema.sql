@@ -46,7 +46,8 @@ CREATE TABLE vehicles(
   make TEXT,
   model TEXT,
   model_year INTEGER,
-  ev_type TEXT
+  ev_type TEXT,
+  UNIQUE(vin,make,model,model_year, ev_type)
 );
 
 CREATE TABLE locations(
@@ -58,7 +59,7 @@ CREATE TABLE locations(
   region TEXT,
   legislative_district INTEGER,
   census_tract_2020 INTEGER,
-  UNIQUE(postal_code, county, city)
+  UNIQUE(postal_code, county, city,state, legislative_district, census_tract_2020)
 );
 
 CREATE TABLE coordinates(
@@ -128,7 +129,15 @@ CREATE TABLE hb2042_compliance(
   meets_sale_date_req TEXT,
   sale_date_req_reason TEXT,
   meets_sale_price_req TEXT,
-  sale_price_req_reason TEXT
+  sale_price_req_reason TEXT,
+  UNIQUE(
+    meets_range_req,
+    range_req_reason,
+    meets_sale_date_req,
+    sale_date_req_reason,
+    meets_sale_price_req,
+    sale_price_req_reason
+  )
 );
 
 
