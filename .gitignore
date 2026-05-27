@@ -1,0 +1,8 @@
+# databases
+*.db
+*.sqlite
+*.sqlite3
+
+# python cache
+__pychache__/
+*.pyc
