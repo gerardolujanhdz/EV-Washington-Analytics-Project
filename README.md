@@ -10,6 +10,8 @@ The pair of datasets used for this project regard the population and registratio
 The link to the datasets are below:
 
 [Electric Vehicle Population](https://catalog.data.gov/dataset/electric-vehicle-population-data?from_hint=eyJzb3J0IjoicG9wdWxhcml0eSJ9)
+<br>
+
 [Electric Vehicle Registration Activity by Year](https://data.wa.gov/Transportation/Electric-Vehicle-Registration-Activity-by-Year/tak8-xdcp)
 ## Project Overview
 1. *Setting up an ETL Pipeline:* Retrieving the data from CSV files stored locally, reformatting the data to follow a "star-like" database schema and storing the processed data in a SQLite database for further analysis and processing.
@@ -18,11 +20,11 @@ The link to the datasets are below:
 
 ## Tech Stack Used 
 * SQLite 
-  ** Used for data processing and storage 
+  * Used for data processing and storage 
 * Microsoft Power BI
-  ** Used for data visualization and "dashboarding"
+  * Used for data visualization and "dashboarding"
 * Python 
-  ** Used for additional data processing and machine learning 
+  * Used for additional data processing and machine learning 
 
 
 
