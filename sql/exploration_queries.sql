@@ -72,6 +72,20 @@ FROM population
 LEFT JOIN locations ON population.location_id = locations.location_id
 GROUP BY county;
 
+-- Coordinate Counts by Region
+SELECT 
+	l.region,
+	c.latitude,
+	c.longitude,
+	COUNT(*) AS count_per_coordinate
+FROM 
+	population 
+	LEFT JOIN locations l ON population.location_id = l.location_ID
+	LEFT JOIN coordinates c ON population.coordinate_id = c.coordinate_id 
+GROUP BY c.latitude, c.longitude 
+ORDER BY count_per_coordinate DESC;
+	
+
 
 -- Registration Table Queries 
 --

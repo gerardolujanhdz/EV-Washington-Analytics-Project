@@ -3,14 +3,16 @@ import csv
 import sqlite3
 
 # Connecting to the ev_washington database
-connection = sqlite3.connect("../database/ev_washington.db")
+file_name = "../database/ev_washington.db"
+connection = sqlite3.connect(file_name)
+print(f"Connected to {file_name}")
 
 try:
     # Creating a cursor object to execute sql queries on a db table
     cursor = connection.cursor()
 
     # Running schema.sql
-    with open("../sql/01_schema.sql", "r") as sql_file:
+    with open("../sql/schema.sql", "r") as sql_file:
         sql_script = sql_file.read()
 
     cursor.executescript(sql_script)

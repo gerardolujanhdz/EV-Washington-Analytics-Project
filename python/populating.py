@@ -8,7 +8,7 @@ connection = sqlite3.connect("../database/ev_washington.db")
 cursor = connection.cursor()
 
 # Opening populating.sql file and saving it as a file object
-with open("../sql/03_populating.sql", "r") as sql_file:
+with open("../sql/populating.sql", "r") as sql_file:
     sql_script = sql_file.read()
 
 # Executing sql script populating.sql
