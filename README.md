@@ -24,7 +24,7 @@ The link to the datasets are below:
 * Microsoft Power BI
   * Used for data visualization and "dashboarding"
 * Python 
-  * Used for additional data processing and machine learning 
+  * Used for geometric median estimation
 
 
 

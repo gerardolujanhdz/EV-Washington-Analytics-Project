@@ -72,7 +72,7 @@ FROM population
 LEFT JOIN locations ON population.location_id = locations.location_id
 GROUP BY county;
 
--- Coordinate Counts by Region
+-- Coordinate Counts by Region and Individual Coordinate
 SELECT 
 	l.region,
 	c.latitude,
@@ -84,7 +84,18 @@ FROM
 	LEFT JOIN coordinates c ON population.coordinate_id = c.coordinate_id 
 GROUP BY c.latitude, c.longitude 
 ORDER BY count_per_coordinate DESC;
-	
+
+-- Distinct Coordinate Counts by Region
+SELECT 
+	l.region,
+	COUNT(DISTINCT CONCAT(c.longitude, ' ', c.latitude)) AS count_per_region
+FROM 
+	population 
+	LEFT JOIN locations l ON population.location_id = l.location_ID
+	LEFT JOIN coordinates c ON population.coordinate_id = c.coordinate_id
+WHERE l.state = 'WA'
+GROUP BY l.region
+ORDER BY count_per_region DESC;
 
 
 -- Registration Table Queries 
