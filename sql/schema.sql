@@ -7,10 +7,7 @@
 -- Trying to follow a star schema database layout
 --
 -- Creating tables that will be used to import the two .csv files
-
--- Main table 
-
-
+-- Redundant columns (in facts + dims tables) will be dropped later
 
 CREATE TABLE population(
   id INTEGER PRIMARY KEY,

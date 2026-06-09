@@ -23,5 +23,3 @@ $"argmin"_{y in RR^n} sum_{i=1}^m w_i||x_i - y||_2$ where "argmin" means the val
 == Computation
 A common approach to this problem is the *Weiszfeld's Algorithm* which is a form of #link("https://en.wikipedia.org/wiki/Iteratively_re-weighted_least_squares")[iteratively re-weighted least squares]. This algorithm defines a set of weights that are inversely proportional to the distances from the current estimate to the sample points, and creates a new estimate that is the weighted average of the sample according to these weights (these are weights specific to the iteration itself). That is,
 $y_{k+1} = (sum^m_{i=1} frac(x_1, {||x_i - y_k||})) \/ (sum_{i=1}^m frac(1, {||x_i - y_k||}))$. This method may fail to converge with one of its estimates falls on one of the given points.
-
-
