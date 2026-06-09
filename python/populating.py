@@ -1,20 +1,35 @@
 # Imports
 import sqlite3
+import logging
+import os
 
-# Connecting to the ev_washington database
-connection = sqlite3.connect("../database/ev_washington.db")
+# constants
+DB_PATH = os.path.expanduser("~/code/analytics/ev/database/ev_washington.db")
+POPUlATING_SQL_PATH = os.path.expanduser("~/code/analytics/ev/sql/populating.sql")
+LOG_PATH = os.path.expanduser("~/code/analytics/ev/python/populating.log")
 
-# Creating a cursor object to execute sql queries on a db table
-cursor = connection.cursor()
+# configuring/creating a logger
+logging.basicConfig(
+    filename=LOG_PATH,
+    encoding="utf-8",
+    level=logging.DEBUG,
+    filemode="w",
+    format="%(levelname)s:%(message)s",
+)
+logger = logging.getLogger(__name__)
 
-# Opening populating.sql file and saving it as a file object
-with open("../sql/populating.sql", "r") as sql_file:
-    sql_script = sql_file.read()
 
-# Executing sql script populating.sql
-cursor.executescript(sql_script)
-print("Populating script executed")
+def main() -> None:
+    with sqlite3.connect(DB_PATH) as connection:
+        logger.info("Connected to database at %s", DB_PATH)
+        cursor = connection.cursor()
+        with open(POPUlATING_SQL_PATH, "r") as sql_file:
+            sql_script = sql_file.read()
+            cursor.executescript(sql_script)
+            logger.info("Populating script executed")
+        connection.commit()
+        logger.info("Script Committed")
 
-# Commiting Change
-connection.commit()
-print("Committed!")
+
+if __name__ == "__main__":
+    main()

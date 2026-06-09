@@ -127,7 +127,11 @@ def main() -> None:
         # Printing results
         print("Final Geometric Median Approximations per region:")
         for region, result in results.items():
-            print("{:<20} -> ({:.6f}, {:.6f})".format(region, result[0], result[1]))
+            print(
+                "{:<20} -> (longitude: {:.6f}, latitude: {:.6f})".format(
+                    region, result[0], result[1]
+                )
+            )
     except Exception as e:
         print(f"Error: {e}")
 
