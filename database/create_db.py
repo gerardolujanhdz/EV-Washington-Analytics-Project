@@ -3,8 +3,8 @@ import os
 import logging
 
 # constants
-DB_PATH = os.path.expanduser("~/code/analytics/ev/database/ev_washington.db")
-LOG_PATH = os.path.expanduser("~/code/analytics/ev/database/create_db.log")
+DB_PATH = os.path.relpath("../database/ev_washington.db")
+LOG_PATH = os.path.relpath("./create_db.log")
 filename = "ev_washington.db"
 
 # configuring/creating a logger

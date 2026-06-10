@@ -16,7 +16,7 @@ The link to the datasets are below:
 ## Project Overview
 1. *Setting up an ETL Pipeline:* Retrieving the data from CSV files stored locally, reformatting the data to follow a "star-like" database schema and storing the processed data in a SQLite database for further analysis and processing.
 2. *Business Ready Outputs:* Making the outputs of the first step easy to understand and pretty using Microsoft Power BI.
-3. *Python Modeling:* TBD
+3. Python Modeling: Using the 
 
 ## Tech Stack Used 
 * SQLite 
@@ -24,7 +24,9 @@ The link to the datasets are below:
 * Microsoft Power BI
   * Used for data visualization and "dashboarding"
 * Python 
-  * Used for geometric median estimation
+  * Used for further data processing and geometric median estimation
+
+
 
 
 

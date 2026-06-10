@@ -15,8 +15,8 @@ wgs84 = pyproj.CRS("EPSG:4326")  # source
 
 # constants
 EPSILON = 1e-6
-DB_PATH = os.path.expanduser("~/code/analytics/ev/database/ev_washington.db")
-LOG_PATH = os.path.expanduser("~/code/analytics/ev/python/coordinate_analysis.log")
+DB_PATH = os.path.relpath("../database/ev_washington.db")
+LOG_PATH = os.path.relpath("./coordinate_analysis.log")
 
 # dictionary used to store projections for each region
 region_projections: dict[str, pyproj.CRS] = {

@@ -18,3 +18,20 @@ Note, Washington, USA is in UTM Zone 10 & 11 (EPSG: 32610 & EPSG: 32611)
 )[python formatting]
 
 #link("https://pyformat.info/")[Python formatting]
+
+== Weber Problem
+#link(
+  "https://stackoverflow.com/questions/7171011/minimum-sum-of-all-travel-timeshttps://stackoverflow.com/questions/7171011/minimum-sum-of-all-travel-times",
+)[pointing towards geometric median]
+
+#link("https://en.wikipedia.org/wiki/Weber_problem")[weber problem wikipedia page]
+
+== Weizsfeld Algorithm
+
+#link(
+  "https://medium.com/@himanshu.sharma.for.work/optimal-geometric-location-using-the-weiszfeld-algorithm-d7fd6229da7c",
+)[medium article]
+
+#link("https://www.emergentmind.com/topics/weiszfeld-type-algorithms")[algo overview]
+
+#link("https://github.com/scoutant/l1-median/blob/main/l1_median.py")[weighted_gm code]

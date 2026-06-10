@@ -4,9 +4,9 @@ import logging
 import os
 
 # constants
-DB_PATH = os.path.expanduser("~/code/analytics/ev/database/ev_washington.db")
-POPUlATING_SQL_PATH = os.path.expanduser("~/code/analytics/ev/sql/populating.sql")
-LOG_PATH = os.path.expanduser("~/code/analytics/ev/python/populating.log")
+DB_PATH = os.path.relpath("../database/ev_washington.db")
+POPUlATING_SQL_PATH = os.path.relpath("./populating.py")
+LOG_PATH = os.path.relpath("./populating.log")
 
 # configuring/creating a logger
 logging.basicConfig(

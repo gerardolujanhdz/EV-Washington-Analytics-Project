@@ -5,14 +5,12 @@ import os
 import logging
 
 # constants
-DB_PATH = os.path.expanduser("~/code/analytics/ev/database/ev_washington.db")
-LOG_PATH = os.path.expanduser("~/code/analytics/ev/python/import.log")
-SCHEMA_PATH = os.path.expanduser("~/code/analytics/ev/sql/schema.sql")
-POPUlATION_CSV_PATH = os.path.expanduser(
-    "~/code/analytics/ev/data/Electric_Vehicle_Population_Data.csv"
-)
-REGISTRATION_CSV_PATH = os.path.expanduser(
-    "~/code/analytics/ev/data/Electric_Vehicle_Title_and_Registration_Activity_20260523.csv"
+DB_PATH = os.path.relpath("../database/ev_washington.db")
+LOG_PATH = os.path.relpath("./import.log")
+SCHEMA_PATH = os.path.relpath("../sql/schema.sql")
+POPUlATION_CSV_PATH = os.path.relpath("../data/Electric_Vehicle_Population_Data.csv")
+REGISTRATION_CSV_PATH = os.path.relpath(
+    "../data/Electric_Vehicle_Title_and_Registration_Activity_20260523.csv"
 )
 
 # pre-structured column Mappings for the .csv files
