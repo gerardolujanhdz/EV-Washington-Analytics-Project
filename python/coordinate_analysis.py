@@ -15,8 +15,8 @@ wgs84 = pyproj.CRS("EPSG:4326")  # source
 
 # constants
 EPSILON = 1e-6
-DB_PATH = os.path.relpath("../database/ev_washington.db")
-LOG_PATH = os.path.relpath("./coordinate_analysis.log")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
+LOG_PATH = os.path.join(os.path.dirname(__file__), "./coordinate_analysis.log")
 
 # dictionary used to store projections for each region
 region_projections: dict[str, pyproj.CRS] = {
@@ -107,7 +107,7 @@ def cartesian_to_wgs84(point: np.ndarray, source: pyproj.CRS) -> tuple[float, fl
     return transformer.transform(point[0], point[1])
 
 
-def main() -> None:
+def main() -> tuple[pd.DataFrame, dict[str, tuple[float, float]]]:
     try:
         # connecting to sqlite3 db
         with sqlite3.connect(DB_PATH) as connection:
@@ -132,9 +132,11 @@ def main() -> None:
                     region, result[0], result[1]
                 )
             )
+        return coordinates_df, results
     except Exception as e:
-        print(f"Error: {e}")
+        logger.error("Error in main: %s", e)
+        raise
 
 
 if __name__ == "__main__":
-    main()
+    coordinates_df, results = main()

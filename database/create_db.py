@@ -3,8 +3,8 @@ import os
 import logging
 
 # constants
-DB_PATH = os.path.relpath("../database/ev_washington.db")
-LOG_PATH = os.path.relpath("./create_db.log")
+DB_PATH = os.path.join(os.path.dirname(__file__), "./ev_washington.db")
+LOG_PATH = os.path.join(os.path.dirname(__file__), "./create_db.log")
 filename = "ev_washington.db"
 
 # configuring/creating a logger

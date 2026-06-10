@@ -1,4 +1,4 @@
-INFO:Connected to database at: /Users/gerardolujanhdz/code/analytics/ev/database/ev_washington.db
+INFO:Connected to database at: /Users/gerardolujanhdz/code/analytics/ev/python/../database/ev_washington.db
 INFO:Loaded 580 coordinate rows from the ev_washington database
 DEBUG:Sample:
               Region  Longitude  Latitude  Count per Coordinate
@@ -14,3 +14,5 @@ INFO:Metro Puget Sound    -> (long: -122.236871, lat: 47.611762)
 INFO:North Central        -> (long: -120.304937, lat: 47.414947)
 INFO:Wine Country         -> (long: -119.273720, lat: 46.273910)
 INFO:Eastern              -> (long: -117.377716, lat: 47.656560)
+DEBUG:Starting new HTTPS connection (1): raw.githubusercontent.com:443
+DEBUG:https://raw.githubusercontent.com:443 "GET /plotly/datasets/master/geojson-counties-fips.json HTTP/1.1" 200 911387
