@@ -32,6 +32,7 @@ region_projections: dict[str, pyproj.CRS] = {
 # squeel query that will be used to import coords from .db
 sql_query = """
 SELECT 
+    l.county as County,
 	l.region AS Region,
 	c.longitude AS Longitude,
 	c.latitude AS Latitude,
@@ -125,13 +126,15 @@ def main() -> tuple[pd.DataFrame, dict[str, tuple[float, float]]]:
             logger.info("%-20s -> (long: %.6f, lat: %.6f)", region, longitude, latitude)
 
         # Printing results
-        print("Final Geometric Median Approximations per region:")
+        # print("Final Geometric Median Approximations per region:")
+        """
         for region, result in results.items():
             print(
                 "{:<20} -> (longitude: {:.6f}, latitude: {:.6f})".format(
                     region, result[0], result[1]
                 )
             )
+        """
         return coordinates_df, results
     except Exception as e:
         logger.error("Error in main: %s", e)

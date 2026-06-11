@@ -35,3 +35,8 @@ Note, Washington, USA is in UTM Zone 10 & 11 (EPSG: 32610 & EPSG: 32611)
 #link("https://www.emergentmind.com/topics/weiszfeld-type-algorithms")[algo overview]
 
 #link("https://github.com/scoutant/l1-median/blob/main/l1_median.py")[weighted_gm code]
+
+== plotting
+#link("https://plotly.com/python/figure-structure/")[plotly]
+
+#link("https://plotly.com/python/choropleth-maps/")[chloropleth map]
