@@ -39,4 +39,14 @@ Note, Washington, USA is in UTM Zone 10 & 11 (EPSG: 32610 & EPSG: 32611)
 == plotting
 #link("https://plotly.com/python/figure-structure/")[plotly]
 
+
 #link("https://plotly.com/python/choropleth-maps/")[chloropleth map]
+
+== regex
+#link("https://docs.python.org/3/library/re.html#re.Pattern.sub")[subs using regex matching]
+#link("https://stackoverflow.com/questions/48348095/re-sub-in-pandas")[re.sub() for panda series]
+
+== dict creation
+#link(
+  "https://stackoverflow.com/questions/17426292/how-to-create-a-dictionary-of-two-pandas-dataframe-columns",
+)[dictionary creation from two pd.DataFrame columns]

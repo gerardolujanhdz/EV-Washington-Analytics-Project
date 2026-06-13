@@ -13,6 +13,9 @@ The link to the datasets are below:
 <br>
 
 [Electric Vehicle Registration Activity by Year](https://data.wa.gov/Transportation/Electric-Vehicle-Registration-Activity-by-Year/tak8-xdcp)
+<br> 
+
+[Resident Population for Counties]("https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-total.html)
 ## Project Overview
 1. *Setting up an ETL Pipeline:* Retrieving the data from CSV files stored locally, reformatting the data to follow a "star-like" database schema and storing the processed data in a SQLite database for further analysis and processing.
 2. *Business Ready Outputs:* Making the outputs of the first step easy to understand and pretty using Microsoft Power BI.
