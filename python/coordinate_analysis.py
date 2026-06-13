@@ -108,21 +108,21 @@ def cartesian_to_wgs84(point: np.ndarray, source: pyproj.CRS) -> tuple[float, fl
     return transformer.transform(point[0], point[1])
 
 
-def main() -> tuple[pd.DataFrame, dict[str, tuple[float, float]]]:
+def main() -> tuple[pd.DataFrame, dict[str, list[float]]]:
     try:
         # connecting to sqlite3 db
         with sqlite3.connect(DB_PATH) as connection:
             logger.info("Connected to database at: %s", DB_PATH)
             coordinates_df = load_in_coordinates(connection=connection)
 
-        results: dict[str, tuple[float, float]] = {}
+        results: dict[str, list[float]] = {}
 
         for region, crs in region_projections.items():
             region_df = coordinates_df[coordinates_df["Region"] == region].copy()
             region_df = wgs84_to_cartesian(region_df, projection=crs)
             cartesian_gm = approx_gm(region_df)
             longitude, latitude = cartesian_to_wgs84(cartesian_gm, crs)
-            results[region] = (longitude, latitude)
+            results[region] = [longitude, latitude]
             logger.info("%-20s -> (long: %.6f, lat: %.6f)", region, longitude, latitude)
 
         # Printing results

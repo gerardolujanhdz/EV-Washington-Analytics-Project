@@ -125,7 +125,7 @@ def plot_choropleth_map_norm(df: pd.DataFrame, counties: dict) -> go.Figure:
     return fig
 
 
-def main() -> None:
+def main() -> pd.DataFrame:
     coordinates_df, coords_gms = ca_main()
     pop_counts = cpi_main()
     counties = load_counties()
@@ -134,10 +134,9 @@ def main() -> None:
     coordinates_df = region_grouping_df(coordinates_df)
     coordinates_df = add_log_count(coordinates_df)
     coordinates_df = add_per_person(coordinates_df, pop_counts)
-    fig = plot_choropleth_map_raw(coordinates_df, counties)
-    fig.show()
-    fig = plot_choropleth_map_norm(coordinates_df, counties)
-    fig.show()
+    # plot_choropleth_map_raw(coordinates_df, counties).show()
+    # plot_choropleth_map_norm(coordinates_df, counties).show()
+    return coordinates_df
 
 
 if __name__ == "__main__":
