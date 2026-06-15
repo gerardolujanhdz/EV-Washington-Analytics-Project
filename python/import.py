@@ -4,7 +4,7 @@ import sqlite3
 import os
 import logging
 
-# constants
+# relative file paths
 DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
 LOG_PATH = os.path.join(os.path.dirname(__file__), "./import.log")
 SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "../sql/schema.sql")
@@ -17,8 +17,20 @@ REGISTRATION_CSV_PATH = os.path.join(
     "../data/Electric_Vehicle_Title_and_Registration_Activity_20260523.csv",
 )
 
-# pre-structured column Mappings for the .csv files
-population_column_mappings = {
+# configuring/creating a logger
+logging.basicConfig(
+    filename=LOG_PATH,
+    encoding="utf-8",
+    level=logging.DEBUG,
+    filemode="w",
+    format="%(levelname)s:%(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
+# column mappings from csv -> sqlite3 table
+
+pop_table_col_maps = {
     "VIN (1-10)": "vin",
     "County": "county",
     "City": "city",
@@ -37,7 +49,7 @@ population_column_mappings = {
     "2020 Census Tract": "census_tract_2020",
 }
 
-registration_column_mappings = {
+reg_table_col_maps = {
     "VIN (1-10)": "vin",
     "DOL Vehicle ID": "dol_vehicle_id",
     "Model Year": "model_year",
@@ -73,38 +85,27 @@ registration_column_mappings = {
     "Electric Utility": "electric_utility",
 }
 
-# columns that the csv data will be inserted into
-population_columns_list = list(population_column_mappings.values())
+# sqlite table columns
+pop_table_cols = list(pop_table_col_maps.values())
 
-registration_columns_list = list(registration_column_mappings.values())
+reg_table_cols = list(reg_table_col_maps.values())
 
-# Writing the structure of the SQL INSERT statements
-population_sql_insert = f"""
-INSERT INTO population ({", ".join(population_columns_list)})
-    VALUES ({", ".join(["?"] * len(population_columns_list))})
+# sql insert statemnts (? serving as placeholders that data will later be piped into @ *_*)
+pop_table_sql_insert = f"""
+INSERT INTO population ({", ".join(pop_table_cols)})
+    VALUES ({", ".join(["?"] * len(pop_table_cols))})
 """
-registration_sql_insert = f"""
-INSERT INTO registration ({", ".join(registration_columns_list)})
-    VALUES ({", ".join(["?"] * len(registration_columns_list))})
+reg_table_sql_insert = f"""
+INSERT INTO registration ({", ".join(reg_table_cols)})
+    VALUES ({", ".join(["?"] * len(reg_table_cols))})
 """
-
-
-# configuring/creating a logger
-logging.basicConfig(
-    filename=LOG_PATH,
-    encoding="utf-8",
-    level=logging.DEBUG,
-    filemode="w",
-    format="%(levelname)s:%(message)s",
-)
-logger = logging.getLogger(__name__)
 
 
 def main() -> None:
     try:
-        # connecting to sqlite3 db
+        # connecting to sqlite3 .db
         with sqlite3.connect(DB_PATH) as connection:
-            logger.info("Connected to database at: %s", DB_PATH)
+            logger.info("Connected to database at -> %s", DB_PATH)
             cursor = connection.cursor()
 
             # running schema.sql
@@ -114,49 +115,53 @@ def main() -> None:
                 logger.info("Schema script executed")
 
             # reading csv rows -> into tuples following the column_list order
-
-            population_csv_rows = []
-            registration_csv_rows = []
+            pop_csv_rows = []
+            reg_csv_rows = []
 
             with open(POPUlATION_CSV_PATH, "r") as file:
                 reader = csv.DictReader(file)
                 for row in reader:
-                    population_csv_rows.append(
+                    pop_csv_rows.append(
                         tuple(
                             None if row[csv_column_name] == "" else row[csv_column_name]
-                            for csv_column_name in population_column_mappings.keys()
+                            for csv_column_name in pop_table_col_maps.keys()
                         )
                     )
 
             with open(REGISTRATION_CSV_PATH, "r") as file:
                 reader = csv.DictReader(file)
                 for row in reader:
-                    registration_csv_rows.append(
+                    reg_csv_rows.append(
                         tuple(
                             None if row[csv_column_name] == "" else row[csv_column_name]
-                            for csv_column_name in registration_column_mappings.keys()
+                            for csv_column_name in reg_table_col_maps.keys()
                         )
                     )
             logger.info("csv rows copied")
 
-            # inserting the rows from the csv into the facts tables using the .executemany()method
+            # inserting the rows from the csv into the facts tables (population + registration) using the .executemany()method in batches
+            # *_*
             batch_size = 10000
             try:
-                for i in range(0, len(population_csv_rows), batch_size):
-                    batch = population_csv_rows[i : i + batch_size]
-                    cursor.executemany(population_sql_insert, batch)
+                for i in range(0, len(pop_csv_rows), batch_size):
+                    batch = pop_csv_rows[i : i + batch_size]
+                    cursor.executemany(pop_table_sql_insert, batch)
                 connection.commit()
-                logger.info(f"Inserted {len(population_csv_rows)} population rows")
+                logger.info(
+                    f"Inserted {len(pop_csv_rows)} csv rows into the population table"
+                )
             except sqlite3.Error as e:
                 connection.rollback()
                 logger.error(f"Population insert failed: {e}")
 
             try:
-                for i in range(0, len(registration_csv_rows), batch_size):
-                    batch = registration_csv_rows[i : i + batch_size]
-                    cursor.executemany(registration_sql_insert, batch)
+                for i in range(0, len(reg_csv_rows), batch_size):
+                    batch = reg_csv_rows[i : i + batch_size]
+                    cursor.executemany(reg_table_sql_insert, batch)
                 connection.commit()
-                logger.info(f"Inserted {len(registration_csv_rows)} registration rows")
+                logger.info(
+                    f"Inserted {len(reg_csv_rows)} csv rows into the registration table"
+                )
             except sqlite3.Error as e:
                 connection.rollback()
                 logger.error(f"Registration insert failed: {e}")
