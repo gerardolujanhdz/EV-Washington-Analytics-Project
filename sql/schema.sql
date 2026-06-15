@@ -35,6 +35,15 @@ CREATE TABLE IF NOT EXISTS population (
     FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id)
 );
 
+CREATE INDEX idx_population_location_id
+ON population (location_id);
+
+CREATE INDEX idx_population_coordinate_id
+ON population (coordinate_id);
+
+CREATE INDEX idx_population_vehicle_id
+ON population (vehicle_id);
+
 
 CREATE TABLE IF NOT EXISTS vehicles (
     vehicle_id INTEGER PRIMARY KEY,
@@ -122,6 +131,15 @@ CREATE TABLE IF NOT EXISTS registration (
     FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id),
     FOREIGN KEY (compliance_id) REFERENCES hb2042_compliance (compliance_id)
 );
+
+CREATE INDEX idx_registration_location_id
+ON registration (location_id);
+
+CREATE INDEX idx_registration_vehicle_id
+ON registration (vehicle_id);
+
+CREATE INDEX idx_registration_compliance_id
+ON registration (compliance_id);
 
 CREATE TABLE IF NOT EXISTS hb2042_compliance (
     compliance_id INTEGER PRIMARY KEY,
