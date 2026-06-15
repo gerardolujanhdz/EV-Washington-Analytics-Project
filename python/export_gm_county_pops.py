@@ -4,7 +4,7 @@ import logging
 import sqlite3
 
 from coordinate_analysis import main as ca_main
-from county_population_imports import main as cpi_main
+from ../data_processing/county_population_imports.py import main as cpi_main
 
 # paths
 DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
@@ -19,23 +19,6 @@ logging.basicConfig(
     format="%(levelname)s:%(message)s",
 )
 logger = logging.getLogger(__name__)
-
-# sql queries
-create_gm_table = """
-    CREATE TABLE IF NOT EXISTS region_geometric_medians( 
-        county TEXT PRIMARY KEY,
-        latitude TEXT,
-        longitude TEXT,
-        UNIQUE(county)
-    );
-    """
-create_county_pops_table = """
-    CREATE TABLE IF NOT EXISTS county_populations(
-        county TEXT PRIMARY KEY,
-        population INTEGER,
-        UNIQUE(county)
-    );
-    """
 
 gm_table_columns_list = ["county", "latitude", "longitude"]
 county_pops_table_columns_list = ["county", "population"]
@@ -58,12 +41,6 @@ def main() -> None:
             logger.info("Connected to db at %s", DB_PATH)
             cursor = connection.cursor()
 
-            cursor.execute(create_county_pops_table)
-            logger.info("Created county populations table")
-
-            cursor.execute(create_gm_table)
-            logger.info("Created Region geometric medians table")
-
             gm_rows = []
             county_pops_rows = []
 
@@ -85,11 +62,11 @@ def main() -> None:
             except sqlite3.Error as e:
                 logger.error("Geometric median insert failed %s", e)
 
+            """
             # checks
             sql_check_gm = "SELECT * FROM region_geometric_medians LIMIT 5;"
             sql_check_population = "SELECT * FROM county_populations LIMIT 5;"
 
-            """
             try:
                 cursor.execute(sql_check_gm)
                 print("gm sample:")

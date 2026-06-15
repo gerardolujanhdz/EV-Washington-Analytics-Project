@@ -218,23 +218,6 @@ ALTER TABLE coordinates
 ALTER TABLE coordinates 
   DROP COLUMN coordinate_text_02;
 
--- Populating spatial_index table with the id, longitude, latitude from 
--- the coordinates table
---
--- Note: In our spatial_index table, we want minX = maxX = longitude and 
--- minY = maxY = latitude 
-
-INSERT INTO spatial_index(id, minX, maxX, minY, maxY)
-  SELECT 
-    c.coordinate_id,
-    c.longitude,
-    c.longitude,
-    c.latitude,
-    c.latitude
-  FROM coordinates c
-  WHERE longitude IS NOT NULL 
-    AND latitude is NOT NULL;
-
 -- Populating vehicles table from the population and registration tables 
 
 INSERT OR IGNORE INTO vehicles(vin, make, model, model_year, ev_type)
