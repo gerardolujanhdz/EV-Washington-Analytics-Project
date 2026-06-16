@@ -4,9 +4,11 @@ import logging
 import os
 
 # constants
-DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
-POPUlATING_SQL_PATH = os.path.join(os.path.dirname(__file__), "../python/populating.py")
-LOG_PATH = os.path.join(os.path.dirname(__file__), "./populating.log")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../../database/ev_washington.db")
+POPUlATING_SQL_PATH = os.path.join(
+    os.path.dirname(__file__), "../sql_scripts/populating.sql"
+)
+LOG_PATH = os.path.join(os.path.dirname(__file__), "../logs/populating.log")
 
 # configuring/creating a logger
 logging.basicConfig(

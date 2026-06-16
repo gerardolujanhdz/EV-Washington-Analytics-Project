@@ -3,12 +3,12 @@ import os
 import logging
 import sqlite3
 
-from coordinate_analysis import main as ca_main
-from ../data_processing/county_population_imports.py import main as cpi_main
+from geometric_median_computation import main as gm_main
+from county_population_imports import main as cpi_main
 
 # paths
-DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
-LOG_PATH = os.path.join(os.path.dirname(__file__), "./export_gm_county_pops.log")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../../database/ev_washington.db")
+LOG_PATH = os.path.join(os.path.dirname(__file__), "../logs/insert2db_gm_pop.log")
 
 # logging configuration
 logging.basicConfig(
@@ -20,9 +20,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# sql db table structures
 gm_table_columns_list = ["county", "latitude", "longitude"]
 county_pops_table_columns_list = ["county", "population"]
 
+# squeel insert queries (using same logic as in import.py)
 gm_table_sql_insert = f"""
 INSERT OR IGNORE INTO region_geometric_medians ({", ".join(gm_table_columns_list)})
     VALUES ({",".join(["?"] * len(gm_table_columns_list))})
@@ -33,34 +35,50 @@ INSERT OR IGNORE INTO county_populations ({", ".join(county_pops_table_columns_l
 """
 
 
+def dict_to_list(dict, list_name) -> list:
+    list_name = []
+
+    # insert data in dictionary into list as tuple entries
+    for key, value in dict.items():
+        list_name.append((key, value))
+    return list_name
+
+
+def list_to_sql_table(cursor, list_name, sql_query, table_name) -> None:
+    # insert data from list into sql table
+    try:
+        cursor.executemany(sql_query, list_name)
+        logger.info(
+            "inserted %s rows from %s into %s", len(list_name), list_name, table_name
+        )
+    except sqlite3.Error as e:
+        logger.error("%s insert failed :%s", table_name, e)
+
+
 def main() -> None:
     try:
-        coordinates_df, coords_gm_dict = ca_main()
+        # importing {region:geometric_median} dict and {county:2025 population} dict
+        coords_gm_dict = gm_main()
         county_pops_dict = cpi_main()
+
         with sqlite3.connect(DB_PATH) as connection:
             logger.info("Connected to db at %s", DB_PATH)
             cursor = connection.cursor()
 
             gm_rows = []
+            gm_rows = dict_to_list(coords_gm_dict, gm_rows)
+            list_to_sql_table(
+                cursor, gm_rows, gm_table_sql_insert, "region_geometric_medians"
+            )
+
             county_pops_rows = []
-
-            # inserting data into tables
-            for key, value in county_pops_dict.items():
-                county_pops_rows.append((key, value))
-
-            for key, value in coords_gm_dict.items():
-                gm_rows.append((key, value[1], value[0]))
-
-            try:
-                cursor.executemany(county_pops_table_sql_insert, county_pops_rows)
-                logger.info("Inserted county population data")
-            except sqlite3.Error as e:
-                logger.error("Population insert failed : %s", e)
-            try:
-                cursor.executemany(gm_table_sql_insert, gm_rows)
-                logger.info("Inserted county population data")
-            except sqlite3.Error as e:
-                logger.error("Geometric median insert failed %s", e)
+            county_pops_rows = dict_to_list(county_pops_dict, county_pops_rows)
+            list_to_sql_table(
+                cursor,
+                county_pops_rows,
+                county_pops_table_sql_insert,
+                "county_populations",
+            )
 
             """
             # checks

@@ -2,19 +2,21 @@
 import pandas as pd
 import os
 
-# paths
-DATA_PATH = os.path.join(os.path.dirname(__file__), "../data/washington_pop_data.xlsx")
+# path to data
+DATA_PATH = os.path.join(
+    os.path.dirname(__file__), "../../raw_data/washington_pop_data.xlsx"
+)
 
 # constants
 COL_NAMES = [
-    "Geographic_Area",
-    "04/01/2020",
-    "07/01/2020",
-    "07/01/2021",
-    "07/01/2022",
-    "07/01/2023",
-    "07/01/2024",
-    "07/01/2025",
+    "county",
+    "2020",
+    "2020",
+    "2021",
+    "2022",
+    "2023",
+    "2024",
+    "2025",
 ]
 
 
@@ -32,7 +34,7 @@ def rename_columns(df: pd.DataFrame) -> pd.DataFrame:
 def rename_counties(df: pd.DataFrame) -> pd.DataFrame:
     # county name structure : ".{County name} County, Washington"
     # vim motion "s/\v \.(.+) County, Washington/\1/"
-    df["Geographic_Area"] = df["Geographic_Area"].str.replace(
+    df["county"] = df["county"].str.replace(
         r"\.(.+) County, Washington", r"\1", regex=True
     )
     return df
@@ -43,9 +45,7 @@ def main() -> dict[str, int]:
         df = read_excel(DATA_PATH)
         df = rename_columns(df)
         df = rename_counties(df)
-        result = pd.Series(
-            df["07/01/2025"].values, index=df["Geographic_Area"]
-        ).to_dict()
+        result = pd.Series(df["2025"].values, index=df["county"]).to_dict()
         return result
     except Exception as e:
         print(f"Error : {e}")

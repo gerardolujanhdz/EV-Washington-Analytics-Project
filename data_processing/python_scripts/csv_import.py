@@ -5,16 +5,16 @@ import os
 import logging
 
 # relative file paths
-DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
-LOG_PATH = os.path.join(os.path.dirname(__file__), "./import.log")
-SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "../sql/schema.sql")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../../database/ev_washington.db")
+LOG_PATH = os.path.join(os.path.dirname(__file__), "../logs/csv_import.log")
+SCHEMA_PATH = os.path.join(os.path.dirname(__file__), "../sql_scripts/schema.sql")
 
 POPUlATION_CSV_PATH = os.path.join(
-    os.path.dirname(__file__), "../data/Electric_Vehicle_Population_Data.csv"
+    os.path.dirname(__file__), "../../raw_data/Electric_Vehicle_Population_Data.csv"
 )
 REGISTRATION_CSV_PATH = os.path.join(
     os.path.dirname(__file__),
-    "../data/Electric_Vehicle_Title_and_Registration_Activity_20260523.csv",
+    "../../raw_data/Electric_Vehicle_Title_and_Registration_Activity_20260523.csv",
 )
 
 # configuring/creating a logger

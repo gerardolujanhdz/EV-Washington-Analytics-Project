@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 from urllib.request import urlopen
 import json
 
-from coordinate_analysis import main as ca_main
+from geometric_median_computation import main as gm_main
 from county_population_imports import main as cpi_main
 
 
@@ -126,7 +126,7 @@ def plot_choropleth_map_norm(df: pd.DataFrame, counties: dict) -> go.Figure:
 
 
 def main() -> pd.DataFrame:
-    coordinates_df, coords_gms = ca_main()
+    coordinates_df, coords_gms = gm_main()
     pop_counts = cpi_main()
     counties = load_counties()
     county_fips_dict = get_county_fips_dict(counties)

@@ -15,8 +15,10 @@ wgs84 = pyproj.CRS("EPSG:4326")  # source
 
 # constants
 EPSILON = 1e-6
-DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
-LOG_PATH = os.path.join(os.path.dirname(__file__), "./coordinate_analysis.log")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../../database/ev_washington.db")
+LOG_PATH = os.path.join(
+    os.path.dirname(__file__), "../logs/geometric_median_computation.log"
+)
 
 # dictionary used to store projections for each region
 region_projections: dict[str, pyproj.CRS] = {
@@ -82,7 +84,7 @@ def weighted_l1_median(X: np.ndarray, WX: np.ndarray, eps: float = 1e-6) -> np.n
 def load_in_coordinates(connection: sqlite3.Connection) -> pd.DataFrame:
     df = pd.read_sql_query(sql=sql_query, con=connection)
     logger.info("Loaded %d coordinate rows from the ev_washington database", len(df))
-    logger.debug("Sample:\n%s", df.head())
+    logger.info("Sample:\n%s", df.head())
     return df
 
 
@@ -108,7 +110,7 @@ def cartesian_to_wgs84(point: np.ndarray, source: pyproj.CRS) -> tuple[float, fl
     return transformer.transform(point[0], point[1])
 
 
-def main() -> tuple[pd.DataFrame, dict[str, list[float]]]:
+def main() -> dict[str, list[float]]:
     try:
         # connecting to sqlite3 db
         with sqlite3.connect(DB_PATH) as connection:
@@ -118,16 +120,16 @@ def main() -> tuple[pd.DataFrame, dict[str, list[float]]]:
         results: dict[str, list[float]] = {}
 
         for region, crs in region_projections.items():
-            region_df = coordinates_df[coordinates_df["Region"] == region].copy()
+            region_df = coordinates_df[coordinates_df["Region"] == region]
             region_df = wgs84_to_cartesian(region_df, projection=crs)
             cartesian_gm = approx_gm(region_df)
             longitude, latitude = cartesian_to_wgs84(cartesian_gm, crs)
             results[region] = [longitude, latitude]
             logger.info("%-20s -> (long: %.6f, lat: %.6f)", region, longitude, latitude)
 
+        """
         # Printing results
         # print("Final Geometric Median Approximations per region:")
-        """
         for region, result in results.items():
             print(
                 "{:<20} -> (longitude: {:.6f}, latitude: {:.6f})".format(
@@ -135,7 +137,7 @@ def main() -> tuple[pd.DataFrame, dict[str, list[float]]]:
                 )
             )
         """
-        return coordinates_df, results
+        return results
     except Exception as e:
         logger.error("Error in main: %s", e)
         raise
