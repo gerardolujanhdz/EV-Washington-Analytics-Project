@@ -16,7 +16,7 @@ The link to the datasets are below:
 [Electric Vehicle Registration Activity by Year](https://data.wa.gov/Transportation/Electric-Vehicle-Registration-Activity-by-Year/tak8-xdcp)
 <br>
 
-[Resident Population for Counties]("https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-total.html")
+[Resident Population for Counties](https://www.census.gov/data/datasets/time-series/demo/popest/2020s-counties-total.html)
 
 ## Project Overview
 
