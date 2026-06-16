@@ -4,7 +4,7 @@ import logging
 import os
 
 # constants
-DB_PATH = os.path.join(os.path.dirname(__file__), "../../database/ev_washington.db")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
 POPUlATING_SQL_PATH = os.path.join(
     os.path.dirname(__file__), "../sql_scripts/populating.sql"
 )

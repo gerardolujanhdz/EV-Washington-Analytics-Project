@@ -15,7 +15,7 @@ wgs84 = pyproj.CRS("EPSG:4326")  # source
 
 # constants
 EPSILON = 1e-6
-DB_PATH = os.path.join(os.path.dirname(__file__), "../../database/ev_washington.db")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
 LOG_PATH = os.path.join(
     os.path.dirname(__file__), "../logs/geometric_median_computation.log"
 )

@@ -7,7 +7,7 @@ from geometric_median_computation import main as gm_main
 from county_population_imports import main as cpi_main
 
 # paths
-DB_PATH = os.path.join(os.path.dirname(__file__), "../../database/ev_washington.db")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
 LOG_PATH = os.path.join(os.path.dirname(__file__), "../logs/insert2db_gm_pop.log")
 
 # logging configuration
