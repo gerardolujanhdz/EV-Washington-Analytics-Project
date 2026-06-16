@@ -144,4 +144,4 @@ def main() -> dict[str, list[float]]:
 
 
 if __name__ == "__main__":
-    coordinates_df, results = main()
+    results = main()

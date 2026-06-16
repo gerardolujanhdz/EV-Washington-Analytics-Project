@@ -2,15 +2,34 @@
 import pandas as pd
 import numpy as np
 
+import logging
+import os
+import sqlite3
+
 import plotly.express as px
 import plotly.graph_objects as go
 from urllib.request import urlopen
 import json
 
-from geometric_median_computation import main as gm_main
+from geometric_median_computation import sql_query, load_in_coordinates
 from county_population_imports import main as cpi_main
 
+# constants
+LOG_PATH = os.path.join(os.path.dirname(__file__), "../logs/visualizations.log")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
 
+# configuring/creating a logger
+logging.basicConfig(
+    filename=LOG_PATH,
+    encoding="utf-8",
+    level=logging.DEBUG,
+    filemode="w",
+    format="%(levelname)s:%(message)s",
+)
+logger = logging.getLogger(__name__)
+
+
+# loading in location data for choropleth mapbox county level
 def load_counties() -> dict:
     with urlopen(
         "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
@@ -45,19 +64,19 @@ def add_df_fips_index(
     return df
 
 
-def add_pop_counts(county_pops: dict[str, int], df: pd.DataFrame) -> pd.DataFrame:
-    df["pop"] = df["County"].map(county_pops)
+def add_pop_count(county_pops: dict[str, int], df: pd.DataFrame) -> pd.DataFrame:
+    df["pop_count"] = df["County"].map(county_pops)
     return df
 
 
-def add_per_person(df: pd.DataFrame, pop_counts: dict[str, int]) -> pd.DataFrame:
+def add_per_person(df: pd.DataFrame) -> pd.DataFrame:
     df["ev_per_person_count"] = df.apply(
-        lambda row: row["Count per County"] / pop_counts[row["County"]], axis=1
+        lambda row: row["Count per County"] / row["pop_count"], axis=1
     )
     return df
 
 
-def region_grouping_df(df: pd.DataFrame) -> pd.DataFrame:
+def county_grouping_df(df: pd.DataFrame) -> pd.DataFrame:
     county_df = (
         df.groupby(["County", "fips_location"], as_index=False)["Count per Coordinate"]
         .sum()
@@ -125,18 +144,33 @@ def plot_choropleth_map_norm(df: pd.DataFrame, counties: dict) -> go.Figure:
     return fig
 
 
-def main() -> pd.DataFrame:
-    coordinates_df, coords_gms = gm_main()
-    pop_counts = cpi_main()
-    counties = load_counties()
-    county_fips_dict = get_county_fips_dict(counties)
-    coordinates_df = add_df_fips_index(county_fips_dict, coordinates_df)
-    coordinates_df = region_grouping_df(coordinates_df)
-    coordinates_df = add_log_count(coordinates_df)
-    coordinates_df = add_per_person(coordinates_df, pop_counts)
-    # plot_choropleth_map_raw(coordinates_df, counties).show()
-    # plot_choropleth_map_norm(coordinates_df, counties).show()
-    return coordinates_df
+def dataframe_transformations(
+    df: pd.DataFrame, county_fips_dict: dict[str, str], pop_counts: dict[str, int]
+) -> pd.DataFrame:
+    df = add_df_fips_index(county_fips_dict, df)
+    df = county_grouping_df(df)
+    df = add_pop_count(pop_counts, df)
+    df = add_log_count(df)
+    df = add_per_person(df)
+    return df
+
+
+def main() -> None:
+    try:
+        with sqlite3.connect(DB_PATH) as connection:
+            logger.info("Connected to database at: %s", DB_PATH)
+            coordinates_df = load_in_coordinates(connection=connection)
+
+        pop_counts = cpi_main()
+        counties = load_counties()
+        county_fips_dict = get_county_fips_dict(counties)
+        coordinates_df = dataframe_transformations(
+            coordinates_df, county_fips_dict, pop_counts
+        )
+        plot_choropleth_map_raw(coordinates_df, counties).show()
+        plot_choropleth_map_norm(coordinates_df, counties).show()
+    except Exception as e:
+        logger.error("Error: %s", e)
 
 
 if __name__ == "__main__":
