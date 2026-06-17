@@ -18,12 +18,12 @@ I used the following triplet of datasets for this project:
 
 With the goal of this project being end-to-end, that meaning, from ingesting of the raw data to modeling the processed data, I outlined the project as such:
 
-* 1. Setting up an ETL Pipeline (SQL + Python)
-* 1.1 Creating a local SQLite Database to house the data in a [star-like schema](https://en.wikipedia.org/wiki/Star_schema) (for Power BI best practice)
-  2. Retrieving the data from locally stored .csv|.xlsx files and reformatting it to match the database schema 
-  3. Inserting and storing the processed data in the local database for further analysis work
+1. Setting up an ETL Pipeline (SQL + Python)
+    1. Creating a local SQLite Database to house the data in a [star-like schema](https://en.wikipedia.org/wiki/Star_schema) (for Power BI best practice)
+    2. Retrieving the data from locally stored .csv|.xlsx files and reformatting it to match the database schema 
+    3. Inserting and storing the processed data in the local database for further analysis work
 2. EDA (SQL)
-  1. Writing some exploratory queries on the data to further check the pipeline and answer some preliminary questions (e.g. most common makes, number of EV registrations per year, etc.)
+    1. Writing some exploratory queries on the data to further check the pipeline and answer some preliminary questions (e.g. most common makes, number of EV registrations per year, etc.)
 3. 
 
 1. _Setting up an ETL Pipeline:_ Retrieving the data from CSV files stored locally, reformatting the data to follow a "star-like" database schema and storing the processed data in a SQLite database for further analysis and processing.
