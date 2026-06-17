@@ -52,9 +52,9 @@ Picture below taken is a screenshot from the [DBeaver](https://dbeaver.io/) tabl
 ### Plotly Visuals
 Visualizing distribution of electric vehicles in Washington state per county using a [tile choropleth map](https://plotly.com/python/tile-county-choropleth/)  <br>
 Raw EV Counts <br>
-![Raw EV Count](./pics/raw_ev_count.png)
+![Raw EV Count](./pics/raw_count.png)
 Normalized by County Population <br>
-![Normalized by County Population](./pics/pop_norm_ev_count.png)
+![Normalized by County Population](./pics/pop_norm.png)
 
 ## Tech Stack Used
 
