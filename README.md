@@ -49,12 +49,25 @@ Let's say that firm _X_ wants to build a single EV charging station in each of W
 Picture below taken is a screenshot from the [DBeaver](https://dbeaver.io/) tables diagram window <br>
 ![Schema Diagram](./pics/schema_diagram.png)
 
+### Geometric Median Approximations
+
+ * Northwest            -> (long: -122.498583, lat: 48.687590)
+ * Peninsulas           -> (long: -122.652754, lat: 47.620572)
+ * Southwest            -> (long: -122.575824, lat: 45.688965)
+ * Metro Puget Sound    -> (long: -122.236871, lat: 47.611762)
+ * North Central        -> (long: -120.304937, lat: 47.414947)
+ * Wine Country         -> (long: -119.273720, lat: 46.273910)
+ * Eastern              -> (long: -117.377716, lat: 47.656560)
+
 ### Plotly Visuals
 Visualizing distribution of electric vehicles in Washington state per county using a [tile choropleth map](https://plotly.com/python/tile-county-choropleth/)  <br>
 Raw EV Counts <br>
 ![Raw EV Count](./pics/raw_count.png)
 Normalized by County Population <br>
 ![Normalized by County Population](./pics/pop_norm.png)
+
+
+
 
 ## Tech Stack Used
 
