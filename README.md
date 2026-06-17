@@ -49,6 +49,12 @@ Let's say that firm _X_ wants to build a single EV charging station in each of W
 Picture below taken is a screenshot from the [DBeaver](https://dbeaver.io/) tables diagram window <br>
 ![Schema Diagram](./pics/schema_diagram.png)
 
+### Plotly Visuals
+Visualizing distribution of electric vehicles in Washington state per county using a [tile choropleth map](https://plotly.com/python/tile-county-choropleth/)  <br>
+Raw EV Counts <br>
+![Raw EV Count](./pics/raw_ev_count.png.png)
+Normalized by County Population <br>
+![Normalized by County Population](./pics/pop_norm_ev_count.png)
 
 ## Tech Stack Used
 
