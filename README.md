@@ -18,8 +18,8 @@ I used the following triplet of datasets for this project:
 
 With the goal of this project being end-to-end, that meaning, from ingesting of the raw data to modeling the processed data, I outlined the project as such:
 
-1. Setting up an ETL Pipeline (SQL + Python)
-  1. Creating a local SQLite Database to house the data in a [star-like schema](https://en.wikipedia.org/wiki/Star_schema) (for Power BI best practice)
+* 1. Setting up an ETL Pipeline (SQL + Python)
+* 1.1 Creating a local SQLite Database to house the data in a [star-like schema](https://en.wikipedia.org/wiki/Star_schema) (for Power BI best practice)
   2. Retrieving the data from locally stored .csv|.xlsx files and reformatting it to match the database schema 
   3. Inserting and storing the processed data in the local database for further analysis work
 2. EDA (SQL)
