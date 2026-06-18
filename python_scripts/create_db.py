@@ -3,8 +3,8 @@ import os
 import logging
 
 # constants
-DB_PATH = os.path.join(os.path.dirname(__file__), "./ev_washington.db")
-LOG_PATH = os.path.join(os.path.dirname(__file__), "./create_db.log")
+DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
+LOG_PATH = os.path.join(os.path.dirname(__file__), "../logs/create_db.log")
 FILENAME = "ev_washington.db"
 
 # configuring/creating a logger
@@ -25,6 +25,7 @@ def main() -> None:
                 logger.info("Database %s formed", FILENAME)
         else:
             print("Database already exists")
+            logger.info("Database already exists")
     except Exception as e:
         print(f"Database {FILENAME} not formed, error : {e}")
 
