@@ -4,6 +4,9 @@ To stray sets of meandering eyes,
 
 This is/was a for-practice end-to-end analytics project using publicly available data from Washington State on their electric vehicle population through the years.
 
+
+### Status: Power BI Dashboard IP
+
 ## Introduction to the Data
 
 I used the following triplet of datasets for this project:
@@ -16,7 +19,7 @@ I used the following triplet of datasets for this project:
 
 ## Project Overview
 
-With the goal of this project being end-to-end, that meaning, from ingesting of the raw data to modeling the processed data, I outlined the project as such:
+With the goal of this project being end-to-end, that meaning, from the ingesting of the raw data to modeling the processed data, I outlined the project as such:
 
 1. Setting up an ETL Pipeline (SQL + Python)
     1. Creating a local [SQLite](https://sqlite.org/index.html) Database to house the data in a [star-like schema](https://en.wikipedia.org/wiki/Star_schema) (Power BI best practice)
@@ -31,7 +34,7 @@ With the goal of this project being end-to-end, that meaning, from ingesting of 
 
 ### Brief Interlude on the Business Case of the Weber Problem
 *Sample Business Case* <br>
-Let's say that firm _X_ wants to build a single EV charging station in each of Washington's seven regions and are concerned on finding the optimal placement of each station. Optimal placement in this case meaning the location that would minimize the distance from each electric vehicle in the region to that particular charging station. This is the [Weber Problem](https://en.wikipedia.org/wiki/Weber_problem) and the [geometric median](https://en.wikipedia.org/wiki/Geometric_median) of our set of points (our EV coordinates) is the answer we are looking for!
+Let's say that firm _X_ wants to build a single EV charging station in each of Washington's seven regions and are concerned on finding the optimal placement of each station. Optimal placement in this case meaning the location that would minimize the distance from each electric vehicle in the region to that particular charging station. This is the [Weber Problem](https://en.wikipedia.org/wiki/Weber_problem) and the [geometric median](https://en.wikipedia.org/wiki/Geometric_median) of our set of points (the coordinates for each electric vehicle) is the answer we are looking for!
 
 ### Database Schema Diagram 
 * Facts Tables
@@ -49,7 +52,14 @@ Let's say that firm _X_ wants to build a single EV charging station in each of W
 Picture below taken is a screenshot from the [DBeaver](https://dbeaver.io/) tables diagram window <br>
 ![Schema Diagram](./pics/schema_diagram.png)
 
-### Geometric Median Approximations
+### Visualization: EV Distribution (Plotly)
+Visualizing distribution of electric vehicles in Washington state per county using a [tile choropleth map](https://plotly.com/python/tile-county-choropleth/)  <br>
+Raw EV Counts <br>
+![Raw EV Count](./pics/raw_count.png)
+Normalized by County Population <br>
+![Normalized by County Population](./pics/pop_norm.png)
+
+### Geometric Median Approximations and Visual
 
  * Northwest            -> (long: -122.498583, lat: 48.687590)
  * Peninsulas           -> (long: -122.652754, lat: 47.620572)
@@ -59,21 +69,13 @@ Picture below taken is a screenshot from the [DBeaver](https://dbeaver.io/) tabl
  * Wine Country         -> (long: -119.273720, lat: 46.273910)
  * Eastern              -> (long: -117.377716, lat: 47.656560)
 
-### Plotly Visuals
-Visualizing distribution of electric vehicles in Washington state per county using a [tile choropleth map](https://plotly.com/python/tile-county-choropleth/)  <br>
-Raw EV Counts <br>
-![Raw EV Count](./pics/raw_count.png)
-Normalized by County Population <br>
-![Normalized by County Population](./pics/pop_norm.png)
-
-
 
 
 ## Tech Stack Used
 
 - SQLite
   - Used for data processing and storage
-- Microsoft Power BI
-  - TO BE USED for data visualization and "dashboarding"
 - Python
   - Used for further data processing and geometric median approximation
+- Microsoft Power BI
+  - TO BE USED for data visualization and "dashboarding"
