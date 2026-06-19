@@ -69,6 +69,8 @@ Normalized by County Population <br>
  * Wine Country         -> (long: -119.273720, lat: 46.273910)
  * Eastern              -> (long: -117.377716, lat: 47.656560)
 
+The geometric median (in black) for each region plotted over a county-level map of Washington <br>
+![Geometric Median Plot](./pics/gm_plot.png)
 
 
 ## Tech Stack Used

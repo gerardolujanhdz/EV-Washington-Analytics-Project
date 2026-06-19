@@ -7,6 +7,15 @@ INFO:Sample:
 2       King  Metro Puget Sound -122.20660  47.67887                  4683
 3       King  Metro Puget Sound -122.12096  47.55584                  4455
 4       King  Metro Puget Sound -122.18720  47.61001                  4125
+INFO:Connected to database at: /Users/gerardolujanhdz/code/analytics/ev/python_scripts/../database/ev_washington.db
+INFO:Loaded 580 coordinate rows from the ev_washington database
+INFO:Sample:
+      County             Region  Longitude  Latitude  Count per Coordinate
+0       King  Metro Puget Sound -122.13158  47.67858                  6918
+1  Snohomish  Metro Puget Sound -122.20105  47.84423                  5481
+2       King  Metro Puget Sound -122.20660  47.67887                  4683
+3       King  Metro Puget Sound -122.12096  47.55584                  4455
+4       King  Metro Puget Sound -122.18720  47.61001                  4125
 INFO:Northwest            -> (long: -122.498583, lat: 48.687590)
 INFO:Peninsulas           -> (long: -122.652754, lat: 47.620572)
 INFO:Southwest            -> (long: -122.575824, lat: 45.688965)

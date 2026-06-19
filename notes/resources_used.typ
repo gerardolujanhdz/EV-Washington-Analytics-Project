@@ -42,6 +42,10 @@ Note, Washington, USA is in UTM Zone 10 & 11 (EPSG: 32610 & EPSG: 32611)
 
 #link("https://plotly.com/python/choropleth-maps/")[chloropleth map]
 
+#link(
+  "https://stackoverflow.com/questions/58141818/plotly-choropleth-combined-with-scattergeo",
+)[scattermapbox overlayed on choropleth map box]
+
 == regex
 #link("https://docs.python.org/3/library/re.html#re.Pattern.sub")[subs using regex matching]
 #link("https://stackoverflow.com/questions/48348095/re-sub-in-pandas")[re.sub() for panda series]
