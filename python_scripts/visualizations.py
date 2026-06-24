@@ -186,7 +186,7 @@ def coord_bubble_plot(
             lon=df["Longitude"],
             mode="markers",
             marker=dict(
-                size=np.cbrt(df["Count per Coordinate"]), color="black", opacity=0.7
+                size=np.cbrt(df["Count per Coordinate"]) * 2, color="black", opacity=0.7
             ),
             showlegend=False,
         )
