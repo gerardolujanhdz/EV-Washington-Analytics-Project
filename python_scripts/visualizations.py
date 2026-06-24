@@ -14,10 +14,15 @@ import json
 from geometric_median_computation import load_in_coordinates, main as gm_main
 from county_population_imports import main as cpi_main
 
+import plotly.io as pio
+
+pio.renderers.default = "browser"
+
 # constants
 LOG_PATH = os.path.join(os.path.dirname(__file__), "../logs/visualizations.log")
 DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
 
+"""
 region_dict = {
     "San Juan": "Northwest",
     "Kitsap": "Peninsulas",
@@ -59,6 +64,7 @@ region_dict = {
     "Whitman": "Eastern",
     "Island": "Northwest",
 }
+"""
 
 # configuring/creating a logger
 logging.basicConfig(
@@ -71,7 +77,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# loading in location data for choropleth mapbox county level
+# loading in location data for choropleth map county level
 def load_counties() -> dict:
     with urlopen(
         "https://raw.githubusercontent.com/plotly/datasets/master/geojson-counties-fips.json"
@@ -112,15 +118,17 @@ def add_pop_count(county_pops: dict[str, int], df: pd.DataFrame) -> pd.DataFrame
 
 
 def add_per_person(df: pd.DataFrame) -> pd.DataFrame:
-    df["ev_per_person_count"] = df.apply(
-        lambda row: row["Count per County"] / row["pop_count"], axis=1
+    df["ev_per_person_count"] = df["Count per County"] / df["pop_count"].replace(
+        0, np.nan
     )
     return df
 
 
 def county_grouping_df(df: pd.DataFrame) -> pd.DataFrame:
     county_df = (
-        df.groupby(["County", "fips_location"], as_index=False)["Count per Coordinate"]
+        df.groupby(["County", "fips_location", "Region"], as_index=False)[
+            "Count per Coordinate"
+        ]
         .sum()
         .rename(columns={"Count per Coordinate": "Count per County"})
     )
@@ -143,47 +151,96 @@ def dataframe_transformations(
     return df
 
 
-def gm_plot(
-    df: pd.DataFrame, gm_dict: dict[str, list[float]], counties: dict, region_dict: dict
+def coord_bubble_plot(
+    df: pd.DataFrame, county_fips_dict: dict, counties: dict
 ) -> go.Figure:
+    df = add_df_fips_index(county_fips_dict, df)
+    df["State"] = "WA"
+    print(df.head())
 
-    # choroplethmapbox underlay (color coded counties by region), scattermapbox over lay with corresponding gm approximation
-    df = df[
-        ["County", "fips_location"]
-    ].copy()  # left with county, fips_location, need a region column
-    df["Region"] = df["County"].map(region_dict)
-
-    # creating pd.dataframe from dictonary
-    region_gm_df = pd.DataFrame(
-        [(key, value[0], value[1]) for key, value in gm_dict.items()],
-        columns=["region", "longitude", "latitude"],
-    )
+    region_colors = {
+        "Northwest": "darkgreen",
+        "Southwest": "deepskyblue",
+        "Peninsulas": "hotpink",
+        "Metro Puget Sound": "lightcoral",
+        "Wine Country": "magenta",
+        "Eastern": "mistyrose",
+        "North Central": "goldenrod",
+    }
 
     fig = px.choropleth_map(
         data_frame=df,
         geojson=counties,
         locations="fips_location",
         color="Region",
+        color_discrete_map=region_colors,
         featureidkey="properties.COUNTY",
         center={"lat": 47.45, "lon": -120.9},
         zoom=6,
         hover_name="County",
         hover_data={"fips_location": False},
     )
-
     fig.add_trace(
         go.Scattermap(
-            lat=region_gm_df["latitude"],
-            lon=region_gm_df["longitude"],
-            text=region_gm_df["region"],
+            lat=df["Latitude"],
+            lon=df["Longitude"],
             mode="markers",
-            marker=dict(size=12, color="rgb(0, 0,0)"),
+            marker=dict(
+                size=np.cbrt(df["Count per Coordinate"]), color="black", opacity=0.7
+            ),
+            showlegend=False,
+        )
+    )
+    print("check 2")
+    return fig
+
+
+def gm_plot(
+    df: pd.DataFrame, gm_dict: dict[str, list[float]], counties: dict
+) -> go.Figure:
+
+    # choroplethmap underlay (color coded counties by region), scattermap over lay with corresponding gm approximation
+
+    # creating pd.dataframe from geometric median dictonary
+    coord_df = pd.DataFrame(
+        [(key, value[0], value[1]) for key, value in gm_dict.items()],
+        columns=["region", "longitude", "latitude"],
+    )
+    region_colors = {
+        "Northwest": "darkgreen",
+        "Southwest": "deepskyblue",
+        "Peninsulas": "hotpink",
+        "Metro Puget Sound": "lightcoral",
+        "Wine Country": "magenta",
+        "Eastern": "mistyrose",
+        "North Central": "goldenrod",
+    }
+
+    fig = px.choropleth_map(
+        data_frame=df,
+        geojson=counties,
+        locations="fips_location",
+        color="Region",
+        color_discrete_map=region_colors,
+        featureidkey="properties.COUNTY",
+        center={"lat": 47.45, "lon": -120.9},
+        zoom=6,
+        hover_name="County",
+        hover_data={"fips_location": False},
+    )
+    fig.add_trace(
+        go.Scattermap(
+            lat=coord_df["latitude"],
+            lon=coord_df["longitude"],
+            text=coord_df["region"],
+            mode="markers",
+            marker=dict(size=12, color="black"),
             hovertemplate="<b>%{text}</b><br>Lat: %{lat:.3f}<br>Lon: %{lon:.3f}<extra></extra>",
             name="Geometric Median",
         )
     )
 
-    print(df)
+    # print(df)
     return fig
 
 
@@ -251,17 +308,21 @@ def main() -> None:
         counties = load_counties()
         gm_dict = gm_main()
         county_fips_dict = get_county_fips_dict(counties)
-        coordinates_df = dataframe_transformations(
+        coordinates_df_transformed = dataframe_transformations(
             coordinates_df, county_fips_dict, pop_counts
         )
-        # plot_choropleth_map_raw(coordinates_df, counties).show()
-        # plot_choropleth_map_norm(coordinates_df, counties).show()
-        gm_plot(coordinates_df, gm_dict, counties, region_dict).show()
+        plot_choropleth_map_raw(df=coordinates_df_transformed, counties=counties).show()
+        plot_choropleth_map_norm(
+            df=coordinates_df_transformed, counties=counties
+        ).show()
+        gm_plot(df=coordinates_df, gm_dict=gm_dict, counties=counties).show()
+        coord_bubble_plot(
+            df=coordinates_df, county_fips_dict=county_fips_dict, counties=counties
+        ).show()
     except Exception as e:
-        logger.error("Error: %s", e)
+        logger.exception("Error: %s", e)
         raise
 
 
 if __name__ == "__main__":
     main()
-
