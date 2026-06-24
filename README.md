@@ -32,10 +32,6 @@ With the goal of this project being end-to-end, that meaning, from the ingesting
     2. Using [Plotly](https://plotly.com/python/) to plot the distribution of electric vehicles in Washington on a per-county level
     3. TODO : Power BI Dashboard
 
-### Brief Interlude on the Business Case of the Weber Problem
-*Sample Business Case* <br>
-Let's say that firm _X_ wants to build a single EV charging station in each of Washington's seven regions and are concerned on finding the optimal placement of each station. Optimal placement in this case meaning the location that would minimize the distance from each electric vehicle in the region to that particular charging station. This is the [Weber Problem](https://en.wikipedia.org/wiki/Weber_problem) and the [geometric median](https://en.wikipedia.org/wiki/Geometric_median) of our set of points (the coordinates for each electric vehicle) is the answer we are looking for!
-
 ### Database Schema Diagram 
 * Facts Tables
     * Population
@@ -59,6 +55,12 @@ Raw EV Counts <br>
 Normalized by County Population <br>
 ![Normalized by County Population](./pics/pop_norm.png)
 
+
+### Brief Interlude on the Business Case of the Weber Problem
+*Sample Business Case* <br>
+Let's say that firm _X_ wants to build a single EV charging station in each of Washington's seven regions and are concerned on finding the optimal placement of each station. Optimal placement in this case meaning the location that would minimize the distance from each electric vehicle in the region to that particular charging station. This is the [Weber Problem](https://en.wikipedia.org/wiki/Weber_problem) and the [geometric median](https://en.wikipedia.org/wiki/Geometric_median) of our set of points (the coordinates for each electric vehicle) is the answer we are looking for!
+
+
 ### Geometric Median Approximations and Visual
 
  * Northwest            -> (long: -122.498583, lat: 48.687590)
@@ -72,6 +74,7 @@ Normalized by County Population <br>
 The geometric median (in black) for each region plotted over a county-level map of Washington <br>
 ![Geometric Median Plot](./pics/gm_plot.png)
 
+Electric vehicle coordinates plotted with bubble size corresponding to the count of electric vehicles at the respective coordinate
 
 ## Tech Stack Used
 
