@@ -14,57 +14,20 @@ import json
 from geometric_median_computation import load_in_coordinates, main as gm_main
 from county_population_imports import main as cpi_main
 
-import plotly.io as pio
-
-pio.renderers.default = "browser"
 
 # constants
 LOG_PATH = os.path.join(os.path.dirname(__file__), "../logs/visualizations.log")
 DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
 
-"""
-region_dict = {
-    "San Juan": "Northwest",
-    "Kitsap": "Peninsulas",
-    "Clallam": "Peninsulas",
-    "Jefferson": "Peninsulas",
-    "Grays Harbor": "Peninsulas",
-    "Mason": "Peninsulas",
-    "Pacific": "Southwest",
-    "Thurston": "Metro Puget Sound",
-    "Lewis": "Southwest",
-    "Wahkiakum": "Southwest",
-    "Cowlitz": "Southwest",
-    "Clark": "Southwest",
-    "Skamania": "Southwest",
-    "Pierce": "Metro Puget Sound",
-    "King": "Metro Puget Sound",
-    "Snohomish": "Metro Puget Sound",
-    "Skagit": "Northwest",
-    "Whatcom": "Northwest",
-    "Okanogan": "North Central",
-    "Chelan": "North Central",
-    "Douglas": "North Central",
-    "Kittitas": "North Central",
-    "Yakima": "Wine Country",
-    "Klickitat": "Wine Country",
-    "Grant": "North Central",
-    "Benton": "Wine Country",
-    "Ferry": "Eastern",
-    "Stevens": "Eastern",
-    "Pend Oreille": "Eastern",
-    "Lincoln": "Eastern",
-    "Spokane": "Eastern",
-    "Adams": "Eastern",
-    "Franklin": "Wine Country",
-    "Walla Walla": "Wine Country",
-    "Columbia": "Wine Country",
-    "Garfield": "Wine Country",
-    "Asotin": "Wine Country",
-    "Whitman": "Eastern",
-    "Island": "Northwest",
+region_colors = {
+    "Northwest": "darkgreen",
+    "Southwest": "deepskyblue",
+    "Peninsulas": "hotpink",
+    "Metro Puget Sound": "lightcoral",
+    "Wine Country": "magenta",
+    "Eastern": "mistyrose",
+    "North Central": "goldenrod",
 }
-"""
 
 # configuring/creating a logger
 logging.basicConfig(
@@ -158,16 +121,6 @@ def coord_bubble_plot(
     df["State"] = "WA"
     print(df.head())
 
-    region_colors = {
-        "Northwest": "darkgreen",
-        "Southwest": "deepskyblue",
-        "Peninsulas": "hotpink",
-        "Metro Puget Sound": "lightcoral",
-        "Wine Country": "magenta",
-        "Eastern": "mistyrose",
-        "North Central": "goldenrod",
-    }
-
     fig = px.choropleth_map(
         data_frame=df,
         geojson=counties,
@@ -208,15 +161,6 @@ def gm_plot(
         [(key, value[0], value[1]) for key, value in gm_dict.items()],
         columns=["region", "longitude", "latitude"],
     )
-    region_colors = {
-        "Northwest": "darkgreen",
-        "Southwest": "deepskyblue",
-        "Peninsulas": "hotpink",
-        "Metro Puget Sound": "lightcoral",
-        "Wine Country": "magenta",
-        "Eastern": "mistyrose",
-        "North Central": "goldenrod",
-    }
 
     fig = px.choropleth_map(
         data_frame=df,
@@ -241,8 +185,6 @@ def gm_plot(
             name="Geometric Median",
         )
     )
-
-    # print(df)
     return fig
 
 
