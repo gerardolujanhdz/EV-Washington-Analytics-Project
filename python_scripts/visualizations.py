@@ -236,7 +236,7 @@ def gm_plot(
             lon=coord_df["longitude"],
             text=coord_df["region"],
             mode="markers",
-            marker=dict(size=12, color="black"),
+            marker=dict(size=18, color="black"),
             hovertemplate="<b>%{text}</b><br>Lat: %{lat:.3f}<br>Lon: %{lon:.3f}<extra></extra>",
             name="Geometric Median",
         )
