@@ -14,7 +14,7 @@ POPUlATION_CSV_PATH = os.path.join(
 )
 REGISTRATION_CSV_PATH = os.path.join(
     os.path.dirname(__file__),
-    "../raw_data/Electric_Vehicle_Title_and_Registration_Activity_20260523.csv",
+    "../raw_data/Electric_Vehicle_Title_and_Registration_Activity.csv",
 )
 
 # configuring/creating a logger
