@@ -137,6 +137,7 @@ def coord_bubble_plot(
         go.Scattermap(
             lat=df["Latitude"],
             lon=df["Longitude"],
+            text=df["Count per Coordinate"],
             mode="markers",
             marker=dict(
                 size=np.cbrt(df["Count per Coordinate"]) * 1.2,
@@ -144,6 +145,7 @@ def coord_bubble_plot(
                 opacity=0.7,
             ),
             showlegend=False,
+            hovertemplate="<b>Count: %{text}</b><br>Lat: %{lat:.3f}<br>Lon: %{lon:.3f}<extra></extra>",
         )
     )
     print("check 2")
