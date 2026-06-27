@@ -1,0 +1,19 @@
+INFO:Connected to database at: C:\Users\gerar\code\ev\python_scripts\../database/ev_washington.db
+INFO:Loaded 585 coordinate rows from the ev_washington database
+INFO:Sample:
+      County             Region  Longitude  Latitude  Count per Coordinate
+0       King  Metro Puget Sound -122.13158  47.67858                  6979
+1  Snohomish  Metro Puget Sound -122.20105  47.84423                  5493
+2       King  Metro Puget Sound -122.20660  47.67887                  4680
+3       King  Metro Puget Sound -122.12096  47.55584                  4461
+4       King  Metro Puget Sound -122.18720  47.61001                  4141
+INFO:Northwest            -> (long: -122.497018, lat: 48.692724)
+INFO:Peninsulas           -> (long: -122.653313, lat: 47.614381)
+INFO:Southwest            -> (long: -122.576862, lat: 45.689167)
+INFO:Metro Puget Sound    -> (long: -122.236360, lat: 47.613570)
+INFO:North Central        -> (long: -120.305210, lat: 47.414930)
+INFO:Wine Country         -> (long: -119.273720, lat: 46.273910)
+INFO:Eastern              -> (long: -117.379294, lat: 47.655766)
+INFO:Connected to db at C:\Users\gerar\code\ev\python_scripts\../database/ev_washington.db
+INFO:inserted 7 rows from [('Northwest', -122.49701807434198, 48.69272371936418), ('Peninsulas', -122.65331257624989, 47.61438122686567), ('Southwest', -122.5768616601278, 45.68916734294984), ('Metro Puget Sound', -122.23635990954918, 47.61357036974385), ('North Central', -120.30520999996745, 47.414930000004084), ('Wine Country', -119.27372000000213, 46.27390999999756), ('Eastern', -117.3792943525875, 47.655766057280395)] into region_geometric_medians
+INFO:inserted 39 rows from [('Adams', 21488), ('Asotin', 22545), ('Benton', 221722), ('Chelan', 81941), ('Clallam', 78202), ('Clark', 532119), ('Columbia', 4141), ('Cowlitz', 114885), ('Douglas', 46473), ('Ferry', 7517), ('Franklin', 102612), ('Garfield', 2416), ('Grant', 105727), ('Grays Harbor', 78144), ('Island', 85657), ('Jefferson', 33970), ('King', 2344939), ('Kitsap', 283374), ('Kittitas', 48803), ('Klickitat', 24331), ('Lewis', 88062), ('Lincoln', 11982), ('Mason', 71165), ('Okanogan', 45230), ('Pacific', 24357), ('Pend Oreille', 14457), ('Pierce', 946288), ('San Juan', 18577), ('Skagit', 132975), ('Skamania', 12669), ('Snohomish', 870656), ('Spokane', 558344), ('Stevens', 49668), ('Thurston', 304261), ('Wahkiakum', 4873), ('Walla Walla', 62361), ('Whatcom', 236392), ('Whitman', 48512), ('Yakima', 259185)] into county_populations

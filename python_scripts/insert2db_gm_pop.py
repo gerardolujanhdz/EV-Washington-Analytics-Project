@@ -17,11 +17,12 @@ logging.basicConfig(
     level=logging.DEBUG,
     filemode="w",
     format="%(levelname)s:%(message)s",
+    force=True,
 )
 logger = logging.getLogger(__name__)
 
 # sql db table structures
-gm_table_columns_list = ["county", "latitude", "longitude"]
+gm_table_columns_list = ["region", "latitude", "longitude"]
 county_pops_table_columns_list = ["county", "population"]
 
 # squeel insert queries (using same logic as in import.py)
@@ -35,21 +36,24 @@ INSERT OR IGNORE INTO county_populations ({", ".join(county_pops_table_columns_l
 """
 
 
-def dict_to_list(dict, list_name) -> list:
-    list_name = []
+def dict_to_list(dict: dict) -> list:
+    value_list = []
 
     # insert data in dictionary into list as tuple entries
     for key, value in dict.items():
-        list_name.append((key, value))
-    return list_name
+        if isinstance(value, (tuple, list)):
+            value_list.append((key, *value))
+        else:
+            value_list.append((key, value))
+    return value_list
 
 
-def list_to_sql_table(cursor, list_name, sql_query, table_name) -> None:
+def list_to_sql_table(cursor, value_list, sql_query, table_name) -> None:
     # insert data from list into sql table
     try:
-        cursor.executemany(sql_query, list_name)
+        cursor.executemany(sql_query, value_list)
         logger.info(
-            "inserted %s rows from %s into %s", len(list_name), list_name, table_name
+            "inserted %s rows from %s into %s", len(value_list), value_list, table_name
         )
     except sqlite3.Error as e:
         logger.error("%s insert failed :%s", table_name, e)
@@ -66,13 +70,13 @@ def main() -> None:
             cursor = connection.cursor()
 
             gm_rows = []
-            gm_rows = dict_to_list(coords_gm_dict, gm_rows)
+            gm_rows = dict_to_list(coords_gm_dict)
             list_to_sql_table(
                 cursor, gm_rows, gm_table_sql_insert, "region_geometric_medians"
             )
 
             county_pops_rows = []
-            county_pops_rows = dict_to_list(county_pops_dict, county_pops_rows)
+            county_pops_rows = dict_to_list(county_pops_dict)
             list_to_sql_table(
                 cursor,
                 county_pops_rows,
@@ -97,7 +101,7 @@ def main() -> None:
                 print(f"Table check failed : {e}")
             """
     except Exception as e:
-        print(e)
+        logger.error("%s", e)
         raise
 
 
