@@ -46,6 +46,7 @@ def main() -> dict[str, int]:
         df = rename_columns(df)
         df = rename_counties(df)
         result = pd.Series(df["2025"].values, index=df["county"]).to_dict()
+        print(result)
         return result
     except Exception as e:
         print(f"Error : {e}")
