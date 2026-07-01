@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS population (
     FOREIGN KEY (location_id) REFERENCES locations (location_id),
     FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id),
     UNIQUE (vin)
-;
+);
 
 CREATE INDEX IF NOT EXISTS idx_population_location_id
 ON population (location_id);
