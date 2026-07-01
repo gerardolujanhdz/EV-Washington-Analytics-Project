@@ -7,8 +7,15 @@
 __pychache__/
 *.pyc
 
-#data
 *.csv
 .DS_Store
 
 logs/*
+*.DS_Store
+
+.venv/
+
+logs/
+
+data/database
+data/raw/*
