@@ -10,3 +10,5 @@ __pychache__/
 #data
 *.csv
 .DS_Store
+
+logs/*
