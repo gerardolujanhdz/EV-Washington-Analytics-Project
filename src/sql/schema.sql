@@ -32,16 +32,17 @@ CREATE TABLE IF NOT EXISTS population (
     vehicle_id INTEGER,
     FOREIGN KEY (coordinate_id) REFERENCES coordinates (coordinate_id),
     FOREIGN KEY (location_id) REFERENCES locations (location_id),
-    FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id)
-);
+    FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id),
+    UNIQUE (vin)
+;
 
-CREATE INDEX idx_population_location_id
+CREATE INDEX IF NOT EXISTS idx_population_location_id
 ON population (location_id);
 
-CREATE INDEX idx_population_coordinate_id
+CREATE INDEX IF NOT EXISTS idx_population_coordinate_id
 ON population (coordinate_id);
 
-CREATE INDEX idx_population_vehicle_id
+CREATE INDEX IF NOT EXISTS idx_population_vehicle_id
 ON population (vehicle_id);
 
 
@@ -129,16 +130,17 @@ CREATE TABLE IF NOT EXISTS registration (
     utility_id INTEGER,
     FOREIGN KEY (location_id) REFERENCES locations (location_id),
     FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id),
-    FOREIGN KEY (compliance_id) REFERENCES hb2042_compliance (compliance_id)
+    FOREIGN KEY (compliance_id) REFERENCES hb2042_compliance (compliance_id),
+    UNIQUE(vin, sale_date, transaction_year, transaction_date)
 );
 
-CREATE INDEX idx_registration_location_id
+CREATE INDEX IF NOT EXISTS idx_registration_location_id
 ON registration (location_id);
 
-CREATE INDEX idx_registration_vehicle_id
+CREATE INDEX IF NOT EXISTS idx_registration_vehicle_id
 ON registration (vehicle_id);
 
-CREATE INDEX idx_registration_compliance_id
+CREATE INDEX IF NOT EXISTS idx_registration_compliance_id
 ON registration (compliance_id);
 
 CREATE TABLE IF NOT EXISTS hb2042_compliance (
