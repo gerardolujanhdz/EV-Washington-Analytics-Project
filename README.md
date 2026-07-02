@@ -46,15 +46,15 @@ With the goal of this project being end-to-end, that meaning, from the ingesting
   - County Populations
 
 Picture below taken is a screenshot from the [DBeaver](https://dbeaver.io/) tables diagram window <br>
-![Schema Diagram](./pics/schema_diagram.png)
+![Schema Diagram](./reports/pics/schema_diagram.png)
 
 ### Visualization: EV Distribution (Plotly)
 
 Visualizing distribution of electric vehicles in Washington state per county using a [tile choropleth map](https://plotly.com/python/tile-county-choropleth/) <br>
 Raw EV Counts <br>
-![Raw EV Count](./pics/raw_count.png)
+![Raw EV Count](./reports/pics/raw_count.png)
 Normalized by County Population <br>
-![Normalized by County Population](./pics/pop_norm.png)
+![Normalized by County Population](./reports/pics/pop_norm.png)
 
 ### Brief Interlude on the Business Case of the Weber Problem
 
@@ -72,10 +72,10 @@ Let's say that firm _X_ wants to build a single EV charging station in each of W
 - Eastern -> (long: -117.377716, lat: 47.656560)
 
 The geometric median (in black) for each region plotted over a county-level map of Washington <br>
-![Geometric Median Plot](./pics/gm_plot.png)
+![Geometric Median Plot](./reports/pics/gm_plot.png)
 
 Electric vehicle coordinates plotted with bubble size corresponding to the count of electric vehicles at the respective coordinate (additionally used to verify, from a glance at least, the geometric median calculations) <br>
-![EV Coordinates Plot](./pics/ev_coord_plot.png)
+![EV Coordinates Plot](./reports/pics/ev_coord_plot.png)
 
 ## Tech Stack Used
 
