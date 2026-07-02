@@ -4,7 +4,7 @@ import os
 
 # path to data
 DATA_PATH = os.path.join(
-    os.path.dirname(__file__), "../raw_data/washington_pop_data.xlsx"
+    os.path.dirname(__file__), "../../data/raw/washington_pop_data.xlsx"
 )
 
 # constants
