@@ -15,10 +15,10 @@ wgs84 = pyproj.CRS("EPSG:4326")  # source
 
 # constants
 EPSILON = 1e-6
-DB_PATH = os.path.join(os.path.dirname(__file__), "../database/ev_washington.db")
-LOG_PATH = os.path.join(
-    os.path.dirname(__file__), "../logs/geometric_median_computation.log"
+DB_PATH = os.path.join(
+    os.path.dirname(__file__), "../../data/database/ev_washington.db"
 )
+LOG_PATH = os.path.join(os.path.dirname(__file__), "../../logs/geometric_median.log")
 
 # dictionary used to store projections for each region
 region_projections: dict[str, pyproj.CRS] = {
@@ -84,6 +84,8 @@ def weighted_l1_median(X: np.ndarray, WX: np.ndarray, eps: float = 1e-6) -> np.n
 def load_in_coordinates(connection: sqlite3.Connection) -> pd.DataFrame:
     df = pd.read_sql_query(sql=sql_query, con=connection)
     logger.info("Loaded %d coordinate rows from the ev_washington database", len(df))
+    print(f"Loaded {len(df)} coordinate rows from the ev_washington db")
+    print(df.head())
     logger.info("Sample:\n%s", df.head())
     return df
 
@@ -115,6 +117,7 @@ def main() -> dict[str, list[float]]:
         # connecting to sqlite3 db
         with sqlite3.connect(DB_PATH) as connection:
             logger.info("Connected to database at: %s", DB_PATH)
+            print(f"Connected to database at {DB_PATH}")
             coordinates_df = load_in_coordinates(connection=connection)
 
         results: dict[str, list[float]] = {}
@@ -126,6 +129,7 @@ def main() -> dict[str, list[float]]:
             longitude, latitude = cartesian_to_wgs84(cartesian_gm, crs)
             results[region] = [longitude, latitude]
             logger.info("%-20s -> (long: %.6f, lat: %.6f)", region, longitude, latitude)
+            print(f"{region: <20} -> (long: {longitude: .6g}, lat: {latitude: .6g})")
 
         """
         # Printing results
