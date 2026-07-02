@@ -208,15 +208,12 @@ UPDATE population
   WHERE population.coordinate = '';
 
 -- Dropping coordinate text in ev_washington 
-ALTER TABLE population 
-  DROP COLUMN coordinate;
+ALTER TABLE population DROP COLUMN coordinate;
 
 -- Dropping coordinate_text_01 and coordinate_text_02 from coordinates table 
-ALTER TABLE coordinates
-  DROP COLUMN coordinate_text_01;
+ALTER TABLE coordinates DROP COLUMN coordinate_text_01;
 
-ALTER TABLE coordinates 
-  DROP COLUMN coordinate_text_02;
+ALTER TABLE coordinates DROP COLUMN coordinate_text_02;
 
 -- Populating vehicles table from the population and registration tables 
 
@@ -267,27 +264,17 @@ SET vehicle_id = (
 
 
 -- Dropping vin, make, model, model_year, ev_type columns from facts tables 
-ALTER TABLE registration
-  DROP COLUMN vin;
-ALTER TABLE registration
-  DROP COLUMN make;
-ALTER TABLE registration 
-  DROP COLUMN model;
-ALTER TABLE registration
-  DROP COLUMN model_year;
-ALTER TABLE registration 
-  DROP COLUMN ev_type;
+ALTER TABLE registration DROP COLUMN vin;
+ALTER TABLE registration DROP COLUMN make;
+ALTER TABLE registration DROP COLUMN model;
+ALTER TABLE registration DROP COLUMN model_year;
+ALTER TABLE registration DROP COLUMN ev_type;
 
-ALTER TABLE population
-  DROP COLUMN vin;
-ALTER TABLE population
-  DROP COLUMN make;
-ALTER TABLE population 
-  DROP COLUMN model;
-ALTER TABLE population
-  DROP COLUMN model_year;
-ALTER TABLE population 
-  DROP COLUMN ev_type;
+ALTER TABLE population DROP COLUMN vin;
+ALTER TABLE population DROP COLUMN make;
+ALTER TABLE population DROP COLUMN model;
+ALTER TABLE population DROP COLUMN model_year;
+ALTER TABLE population DROP COLUMN ev_type;
 
 -- Populating hb2042_compliance table from registration table
 
