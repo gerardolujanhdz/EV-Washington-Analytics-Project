@@ -1,5 +1,5 @@
-INFO:Connected to database at -> /Users/gerardolujanhdz/code/analytics/ev/python_scripts/../database/ev_washington.db
+INFO:Connected to database at -> /Users/gerardolujanhdz/code/analytics/ev/src/data/../../data/database/ev_washington.db
 INFO:Schema script executed
 INFO:csv rows copied
-INFO:Inserted 285822 csv rows into the population table
-INFO:Inserted 1181044 csv rows into the registration table
+INFO:Inserted 287763 csv rows into the population table
+INFO:Inserted 1180897 csv rows into the registration table
