@@ -54,3 +54,10 @@ Note, Washington, USA is in UTM Zone 10 & 11 (EPSG: 32610 & EPSG: 32611)
 #link(
   "https://stackoverflow.com/questions/17426292/how-to-create-a-dictionary-of-two-pandas-dataframe-columns",
 )[dictionary creation from two pd.DataFrame columns]
+
+== misc
+#link("https://docs.python.org/2/library/string.html#formatstrings")[formatting things]
+
+#link(
+  "https://stackoverflow.com/questions/25780022/how-to-make-python-format-floats-with-certain-amount-of-significant-digits",
+)[formatting things]
