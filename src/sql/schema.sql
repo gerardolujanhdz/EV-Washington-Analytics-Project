@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS registration (
     FOREIGN KEY (location_id) REFERENCES locations (location_id),
     FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id),
     FOREIGN KEY (compliance_id) REFERENCES hb2042_compliance (compliance_id),
-    UNIQUE (vin, dol_vehicle_id, transaction_date, transaction_type)
+    UNIQUE (dol_vehicle_id, transaction_date, transaction_type)
 );
 
 CREATE INDEX IF NOT EXISTS idx_registration_location_id
